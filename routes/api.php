@@ -22,4 +22,4 @@ use App\Http\Controllers\Api\DeviceUsageController;
 
 
 route::apiResource('devices', DeviceController::class);
-route::apiResource('devices_usage', DeviceUsageController::class);
+route::apiResource('device_usages', DeviceUsageController::class);

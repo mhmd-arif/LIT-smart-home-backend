@@ -10,8 +10,8 @@ class DeviceUsageController extends Controller
 {
     public function index()
     {
-        $devices_usage = DeviceUsage::paginate();
-        return response()->json($devices_usage);
+        $device_usages = DeviceUsage::paginate();
+        return response()->json($device_usages);
     }
 
     public function store(Request $request)
