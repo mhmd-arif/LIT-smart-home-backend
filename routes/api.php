@@ -3,6 +3,7 @@
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Api\DeviceController;
+use App\Http\Controllers\Api\DeviceUsageController;
 
 /*
 |--------------------------------------------------------------------------
@@ -21,3 +22,4 @@ use App\Http\Controllers\Api\DeviceController;
 
 
 route::apiResource('devices', DeviceController::class);
+route::apiResource('devices_usage', DeviceUsageController::class);

@@ -18,13 +18,11 @@ class DeviceController extends Controller
     {
         $request -> validate([
             'device_name' => 'required',
-            'kwh' => 'required'
+            'type' => 'required',
+            'volt' => 'required',
+            'ampere' => 'required',
+            'watt' => 'required',
         ]);
-
-        // $device = Device::create([
-        //     'device_name' => $request->device_name,
-        //     'kwh' => $request->kwh      
-        // ]);
 
         $device = Device::create($request->all());
         return response()->json($device);
@@ -39,11 +37,17 @@ class DeviceController extends Controller
     {
         $request -> validate([
             'device_name' => 'required',
-            'kwh' => 'required'
+            'type' => 'required',
+            'volt' => 'required',
+            'ampere' => 'required',
+            'watt' => 'required',
         ]);
 
         $device->device_name = $request->device_name;
-        $device->kwh = $request->kwh;
+        $device->type = $request->type;
+        $device->volt = $request->volt;
+        $device->ampere = $request->ampere;
+        $device->watt = $request->watt;        
         $device->save();
 
         return response()->json($device);
@@ -53,7 +57,7 @@ class DeviceController extends Controller
     {
         $device->delete();
 
-        return response()-> json();
+        return response()-> json(['message'=>'device delete successfully']);
     }
 }
 
