@@ -16,7 +16,7 @@ return new class extends Migration
             $table->unsignedBigInteger('device_id');
             $table->unsignedBigInteger('user_id');
             $table->integer('kwh');
-            $table->boolean('is_on');
+            $table->string('status');
             $table->dateTime('created_at');
             // $table->dateTime('created_at')->nullable()->default(new DateTime());
         });
