@@ -4,6 +4,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Api\DeviceController;
 use App\Http\Controllers\Api\DeviceUsageController;
+use App\Http\Controllers\Api\AuthController;
 
 /*
 |--------------------------------------------------------------------------
@@ -23,3 +24,5 @@ use App\Http\Controllers\Api\DeviceUsageController;
 
 route::apiResource('devices', DeviceController::class);
 route::apiResource('device_usages', DeviceUsageController::class);
+
+Route::post('auth/login', [AuthController::class, 'login']);
