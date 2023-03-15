@@ -30,4 +30,19 @@ class AuthController extends Controller
             'token' => $token->plainTextToken
         ]);
     }
+
+    public function register(Request $request)
+    {
+        $request -> validate([
+            'username' => 'required',
+            'email' => 'required',
+            'password' => 'required',
+        ]);
+
+        // $user = $request->all();
+        // $user->password = bcrypt($request->pasword);
+
+        $user = User::create($request->all());
+        return response()->json($user);
+    }
 }

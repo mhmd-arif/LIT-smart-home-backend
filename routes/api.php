@@ -26,3 +26,4 @@ route::apiResource('devices', DeviceController::class);
 route::apiResource('device_usages', DeviceUsageController::class);
 
 Route::post('auth/login', [AuthController::class, 'login']);
+Route::post('auth/register', [AuthController::class, 'register']);
