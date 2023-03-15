@@ -17,8 +17,8 @@ class DeviceUsageController extends Controller
     public function store(Request $request)
     {
         $request -> validate([
-            'device_id' => 'required|exists:device,id',
-            'user_id' => 'required|exists:user,id',
+            'device_id' => 'required|exists:devices,id',
+            'user_id' => 'required|exists:users,id',
             'kwh' => 'required',
             'status' => 'required|in:ON,OFF',
             'created_at' => 'required',

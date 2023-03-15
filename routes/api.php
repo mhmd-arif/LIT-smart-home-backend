@@ -22,7 +22,9 @@ use App\Http\Controllers\Api\AuthController;
 // });
 
 
+Route::patch('devices/update_state/{id}', [DeviceController::class, 'updateState']);
 route::apiResource('devices', DeviceController::class);
+
 route::apiResource('device_usages', DeviceUsageController::class);
 
 Route::post('auth/login', [AuthController::class, 'login']);
