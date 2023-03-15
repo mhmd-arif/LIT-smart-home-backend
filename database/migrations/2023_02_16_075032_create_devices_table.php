@@ -13,11 +13,14 @@ return new class extends Migration
     {
         Schema::create('devices', function (Blueprint $table) {
             $table->id();
-            $table->string('device_name', 100);
-            $table->string('type', 100);
-            $table->float('volt');
-            $table->float('ampere');
-            $table->float('watt');
+            $table->unsignedBigInteger('user_id')->nullable();
+            $table->string('device_name', 100)->nullable()->default('device_name');
+            $table->string('type', 100)->nullable()->default('device_type');
+            $table->float('volt')->nullable()->default(0);
+            $table->float('ampere')->nullable()->default(0);
+            $table->float('watt')->nullable()->default(0);
+            $table->boolean('state')->nullable()->default(false);
+            $table->float('last_kwh')->nullable()->default(0);
             $table->timestamps();
         });
     }

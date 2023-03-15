@@ -39,9 +39,6 @@ class AuthController extends Controller
             'password' => 'required',
         ]);
 
-        // $user = $request->all();
-        // $user->password = bcrypt($request->pasword);
-
         $user = User::create($request->all());
         return response()->json($user);
     }

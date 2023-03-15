@@ -17,7 +17,6 @@ class UserSeeder extends Seeder
             'username' => 'lit-user-1',
             'email' => 'lit-user-1@gmail.com',
             'password' => bcrypt('litpassword'),
-            'devices_list' => json_encode([1,2])
         ]);
     }
 }
