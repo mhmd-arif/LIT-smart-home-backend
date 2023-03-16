@@ -17,74 +17,74 @@ class DeviceUsageSeeder extends Seeder
             ["device_id"=>1,
                 "user_id"=>1,
                 "kwh"=>0,
-                "created_at"=>"2023-01-01 00:00:00"
+                "created_at"=>"2023-03-16 23:50:00"
             ],
-            ["device_id"=>1,
+            ["device_id"=>2,
                 "user_id"=>1,
-                "kwh"=>15,
-                "created_at"=>"2023-01-01 00:15:00"
+                "kwh"=>100,
+                "created_at"=>"2023-03-16 23:55:00"
             ],
-            ["device_id"=>1,
-                "user_id"=>1,
-                "kwh"=>30,
-                "created_at"=>"2023-01-01 00:30:00"
-            ],
-            ["device_id"=>1,
-                "user_id"=>1,
-                "kwh"=>30,
-                "created_at"=>"2023-01-01 00:45:00"
-            ],
-            ["device_id"=>1,
-                "user_id"=>1,
-                "kwh"=>30,
-                "created_at"=>"2023-01-01 01:00:00"
-            ],
-            ["device_id"=>1,
-                "user_id"=>1,
-                "kwh"=>45,
-                "created_at"=>"2023-01-01 01:15:00"
-            ],
-            ["device_id"=>1,
-                "user_id"=>1,
-                "kwh"=>60,
-                "created_at"=>"2023-01-01 01:30:00"
-            ],
+            // ["device_id"=>1,
+            //     "user_id"=>1,
+            //     "kwh"=>30,
+            //     "created_at"=>"2023-03-16 00:30:00"
+            // ],
+            // ["device_id"=>1,
+            //     "user_id"=>1,
+            //     "kwh"=>30,
+            //     "created_at"=>"2023-03-16 00:45:00"
+            // ],
+            // ["device_id"=>1,
+            //     "user_id"=>1,
+            //     "kwh"=>30,
+            //     "created_at"=>"2023-03-16 01:00:00"
+            // ],
+            // ["device_id"=>1,
+            //     "user_id"=>1,
+            //     "kwh"=>45,
+            //     "created_at"=>"2023-03-16 01:15:00"
+            // ],
+            // ["device_id"=>1,
+            //     "user_id"=>1,
+            //     "kwh"=>60,
+            //     "created_at"=>"2023-03-16 21:35:00"
+            // ],
             
-            ["device_id"=>2,
-                "user_id"=>1,
-                "kwh"=>0,
-                "created_at"=>"2023-01-01 00:00:00"
-            ],
-            ["device_id"=>2,
-                "user_id"=>1,
-                "kwh"=>0,
-                "created_at"=>"2023-01-01 00:15:00"
-            ],
-            ["device_id"=>2,
-                "user_id"=>1,
-                "kwh"=>0,
-                "created_at"=>"2023-01-01 00:30:00"
-            ],
-            ["device_id"=>2,
-                "user_id"=>1,
-                "kwh"=>30,
-                "created_at"=>"2023-01-01 00:45:00"
-            ],
-            ["device_id"=>2,
-                "user_id"=>1,
-                "kwh"=>30,
-                "created_at"=>"2023-01-01 01:00:00"
-            ],
-            ["device_id"=>2,
-                "user_id"=>1,
-                "kwh"=>60,
-                "created_at"=>"2023-01-01 01:15:00"
-            ],
-            ["device_id"=>2,
-                "user_id"=>1,
-                "kwh"=>60,
-                "created_at"=>"2023-01-01 01:30:00"
-            ],
+            // ["device_id"=>2,
+            //     "user_id"=>1,
+            //     "kwh"=>0,
+            //     "created_at"=>"2023-03-16 00:00:00"
+            // ],
+            // ["device_id"=>2,
+            //     "user_id"=>1,
+            //     "kwh"=>0,
+            //     "created_at"=>"2023-03-16 00:15:00"
+            // ],
+            // ["device_id"=>2,
+            //     "user_id"=>1,
+            //     "kwh"=>0,
+            //     "created_at"=>"2023-03-16 00:30:00"
+            // ],
+            // ["device_id"=>2,
+            //     "user_id"=>1,
+            //     "kwh"=>30,
+            //     "created_at"=>"2023-03-16 00:45:00"
+            // ],
+            // ["device_id"=>2,
+            //     "user_id"=>1,
+            //     "kwh"=>30,
+            //     "created_at"=>"2023-03-16 01:00:00"
+            // ],
+            // ["device_id"=>2,
+            //     "user_id"=>1,
+            //     "kwh"=>60,
+            //     "created_at"=>"2023-03-16 01:15:00"
+            // ],
+            // ["device_id"=>2,
+            //     "user_id"=>1,
+            //     "kwh"=>60,
+            //     "created_at"=>"2023-03-16 21:30:00"
+            // ],
         ]);
     }
 }

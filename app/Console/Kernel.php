@@ -13,16 +13,7 @@ class Kernel extends ConsoleKernel
      */
     protected function schedule(Schedule $schedule): void
     {
-        // $schedule->command('inspire')->hourly();
-        // $schedule->call(function () {
-        //     DB::table('users')->insert([
-        //         'username' => 'lit-user-1',
-        //         'email' => 'lit-user-1@gmail.com',
-        //         'password' => bcrypt('litpassword'),
-        //     ]);
-        //     // info('dev test');
-        // })->everyMinute();
-
+        $schedule->command('run:device')->everyMinute();
     }
 
     /**

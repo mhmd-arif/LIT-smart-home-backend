@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use App\Models\Device;
+use App\Models\DeviceUsage;
 use Illuminate\Http\Request;
 
 class DeviceController extends Controller
@@ -63,12 +64,13 @@ class DeviceController extends Controller
     {
         $request -> validate([
             'state' => 'required',
-            'last_kwh' => 'required',
         ]);
+
+        $last_kwh = DeviceUsage::orderBy('created_at', 'desc')->where("device_id", $id)->first()->kwh;
 
         $device = Device::where("id", $id)->update([
             "state" => $request->state,
-            "last_kwh" => $request->last_kwh,
+            "last_kwh" => $last_kwh,
         ]);
 
         $device = Device::find($id);

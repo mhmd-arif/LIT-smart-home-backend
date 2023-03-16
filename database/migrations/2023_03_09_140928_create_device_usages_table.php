@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::create('device_usages', function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger('device_id');
-            $table->unsignedBigInteger('user_id');
+            // $table->unsignedBigInteger('user_id');
             $table->float('kwh');
             $table->dateTime('created_at');
             // $table->dateTime('created_at')->nullable()->default(new DateTime());
