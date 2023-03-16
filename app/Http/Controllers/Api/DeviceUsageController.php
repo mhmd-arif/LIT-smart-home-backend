@@ -18,9 +18,8 @@ class DeviceUsageController extends Controller
     {
         $request  -> validate([
             'device_id' => 'required|exists:devices,id',
-            'user_id' => 'required|exists:users,id',
+            // 'user_id' => 'required|exists:users,id',
             'kwh' => 'required',
-            'status' => 'required|in:ON,OFF',
             'created_at' => 'required',
         ]);
 
