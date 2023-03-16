@@ -17,86 +17,72 @@ class DeviceUsageSeeder extends Seeder
             ["device_id"=>1,
                 "user_id"=>1,
                 "kwh"=>0,
-                "status"=>'ON',
                 "created_at"=>"2023-01-01 00:00:00"
             ],
             ["device_id"=>1,
                 "user_id"=>1,
                 "kwh"=>15,
-                "status"=>'ON',
                 "created_at"=>"2023-01-01 00:15:00"
             ],
             ["device_id"=>1,
                 "user_id"=>1,
                 "kwh"=>30,
-                "status"=>'OFF',
                 "created_at"=>"2023-01-01 00:30:00"
             ],
             ["device_id"=>1,
                 "user_id"=>1,
                 "kwh"=>30,
-                "status"=>'OFF',
                 "created_at"=>"2023-01-01 00:45:00"
             ],
             ["device_id"=>1,
                 "user_id"=>1,
                 "kwh"=>30,
-                "status"=>'ON',
                 "created_at"=>"2023-01-01 01:00:00"
             ],
             ["device_id"=>1,
                 "user_id"=>1,
                 "kwh"=>45,
-                "status"=>'ON',
                 "created_at"=>"2023-01-01 01:15:00"
             ],
             ["device_id"=>1,
                 "user_id"=>1,
                 "kwh"=>60,
-                "status"=>'ON',
                 "created_at"=>"2023-01-01 01:30:00"
             ],
             
             ["device_id"=>2,
                 "user_id"=>1,
                 "kwh"=>0,
-                "status"=>'OFF',
                 "created_at"=>"2023-01-01 00:00:00"
             ],
             ["device_id"=>2,
                 "user_id"=>1,
                 "kwh"=>0,
-                "status"=>'OFF',
                 "created_at"=>"2023-01-01 00:15:00"
             ],
             ["device_id"=>2,
                 "user_id"=>1,
                 "kwh"=>0,
-                "status"=>'ON',
                 "created_at"=>"2023-01-01 00:30:00"
             ],
             ["device_id"=>2,
                 "user_id"=>1,
                 "kwh"=>30,
-                "status"=>'OFF',
                 "created_at"=>"2023-01-01 00:45:00"
             ],
             ["device_id"=>2,
                 "user_id"=>1,
                 "kwh"=>30,
-                "status"=>'ON',
                 "created_at"=>"2023-01-01 01:00:00"
             ],
             ["device_id"=>2,
                 "user_id"=>1,
                 "kwh"=>60,
-                "status"=>'ON',
                 "created_at"=>"2023-01-01 01:15:00"
             ],
             ["device_id"=>2,
                 "user_id"=>1,
                 "kwh"=>60,
-                "status"=>'OFF',
                 "created_at"=>"2023-01-01 01:30:00"
             ],
         ]);

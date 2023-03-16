@@ -42,4 +42,15 @@ class AuthController extends Controller
         $user = User::create($request->all());
         return response()->json($user);
     }
+
+    public function logout(Request $request): RedirectResponse
+    {
+        Auth::logout();
+
+        $request->session()->invalidate();
+    
+        $request->session()->regenerateToken();
+    
+        return redirect('/');
+    }
 }
