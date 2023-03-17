@@ -17,7 +17,7 @@ class DeviceUsageController extends Controller
         return response()->json($device_usages);
     }
 
-    public function store(Request $request)
+    public function createUsage()
     {
         $devices = DB::table('devices')->get();
         foreach ($devices as $device)
