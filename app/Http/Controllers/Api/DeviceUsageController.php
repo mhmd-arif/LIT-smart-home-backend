@@ -3,8 +3,11 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
-use App\Models\DeviceUsage;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
+use App\Models\Device;
+use App\Models\DeviceUsage;
+use Carbon\Carbon;
 
 class DeviceUsageController extends Controller
 {
@@ -16,15 +19,27 @@ class DeviceUsageController extends Controller
 
     public function store(Request $request)
     {
-        $request  -> validate([
-            'device_id' => 'required|exists:devices,id',
-            // 'user_id' => 'required|exists:users,id',
-            'kwh' => 'required',
-            'created_at' => 'required',
-        ]);
+        $devices = DB::table('devices')->get();
+        foreach ($devices as $device)
+        {
+            if($device->state==1){
+                $time_last_change = (new Carbon($device->updated_at))->toImmutable()->setTimezone('Asia/Jakarta');
 
-        $device_usage = DeviceUsage::create($request->all());
-        return response()->json($device_usage);
+                $get_minutes = ($time_last_change->diffInSeconds(now()))/3600;
+
+                $kwh = round( $get_minutes * $device->watt, 2) + ($device->last_kwh);
+            } else {
+                $kwh = $device->last_kwh;
+            }
+
+            DB::table('device_usages')->insert([
+                ["device_id"=>$device->id,
+                    "kwh"=>$kwh,
+                    "created_at"=>now()
+                ]
+            ]);
+        }
+        return response()->json(['message'=>'device_usage created successfully']);
     }
 
     public function show(DeviceUsage $device_usage)
