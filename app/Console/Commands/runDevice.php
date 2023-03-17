@@ -52,7 +52,6 @@ class runDevice extends Command
                     "created_at"=>now()
                 ]
             ]);
-            var_dump($kwh);
         }
     }
 }
