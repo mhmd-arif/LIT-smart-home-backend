@@ -34,7 +34,7 @@ class AuthController extends Controller
     public function register(Request $request)
     {
         $request -> validate([
-            'username' => 'required',
+            'name' => 'required',
             'email' => 'required',
             'password' => 'required',
         ]);

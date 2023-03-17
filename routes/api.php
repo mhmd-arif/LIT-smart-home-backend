@@ -3,6 +3,7 @@
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Api\DeviceController;
+use App\Http\Controllers\Api\UserController;
 use App\Http\Controllers\Api\DeviceUsageController;
 use App\Http\Controllers\Api\AuthController;
 
@@ -26,6 +27,8 @@ Route::patch('devices/update_state/{id}', [DeviceController::class, 'updateState
 route::apiResource('devices', DeviceController::class);
 
 route::apiResource('device_usages', DeviceUsageController::class);
+
+route::apiResource('users', UserController::class);
 
 Route::post('auth/login', [AuthController::class, 'login']);
 Route::post('auth/register', [AuthController::class, 'register']);
