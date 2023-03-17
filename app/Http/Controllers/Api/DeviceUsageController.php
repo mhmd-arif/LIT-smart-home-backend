@@ -35,6 +35,7 @@ class DeviceUsageController extends Controller
             DB::table('device_usages')->insert([
                 ["device_id"=>$device->id,
                     "kwh"=>$kwh,
+                    "total_watt"=>$device->watt,
                     "created_at"=>now()
                 ]
             ]);
