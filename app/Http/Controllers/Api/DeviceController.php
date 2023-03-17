@@ -20,7 +20,7 @@ class DeviceController extends Controller
         $request -> validate([
             'user_id' => 'required|exists:users,id',
             'device_name' => 'required',
-            'type' => 'required',
+            'category' => 'required',
             'volt' => 'required',
             'ampere' => 'required',
             'watt' => 'required',
@@ -40,21 +40,17 @@ class DeviceController extends Controller
         $request -> validate([
             'user_id' => 'required|exists:users,id',
             'device_name' => 'required',
-            'type' => 'required',
+            'category' => 'required',
             'volt' => 'required',
             'ampere' => 'required',
             'watt' => 'required',
-            // 'state' => 'required',
-            // 'last_kwh' => 'required',
         ]);
 
         $device->device_name = $request->device_name;
-        $device->type = $request->type;
+        $device->category = $request->category;
         $device->volt = $request->volt;
         $device->ampere = $request->ampere;
         $device->watt = $request->watt;   
-        // $device->state = $request->state;   
-        // $device->last_kwh = $request->last_kwh; 
         $device->save();
 
         return response()->json($device);

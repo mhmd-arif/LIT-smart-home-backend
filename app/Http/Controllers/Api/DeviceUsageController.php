@@ -25,11 +25,11 @@ class DeviceUsageController extends Controller
             if($device->state==1){
                 $time_last_change = (new Carbon($device->updated_at))->toImmutable()->setTimezone('Asia/Jakarta');
 
-                $get_minutes = ($time_last_change->diffInSeconds(now()))/3600;
+                $get_diff_hour = ($time_last_change->diffInSeconds(now()))/3600;
 
-                $kwh = round( $get_minutes * $device->watt, 2) + ($device->last_kwh);
+                $kwh = round(($get_diff_hour * $device->watt)/1000, 5) + ($device->last_kwh);
             } else {
-                $kwh = $device->last_kwh;
+                $kwh = round($device->last_kwh/1000, 5);
             }
 
             DB::table('device_usages')->insert([
@@ -44,9 +44,7 @@ class DeviceUsageController extends Controller
 
     public function show(DeviceUsage $device_usage)
     {
-        // return response()->json($device_usage);
         return $device_usage;
-
     }
 
     public function destroy(DeviceUsage $device_usage)

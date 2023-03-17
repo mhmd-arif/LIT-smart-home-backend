@@ -15,12 +15,12 @@ return new class extends Migration
             $table->id();
             $table->unsignedBigInteger('user_id')->nullable();
             $table->string('device_name', 100)->nullable()->default('device_name');
-            $table->string('type', 100)->nullable()->default('device_type');
+            $table->string('category', 100)->nullable()->default('category');
             $table->float('volt')->nullable()->default(0);
             $table->float('ampere')->nullable()->default(0);
             $table->float('watt')->nullable()->default(0);
             $table->boolean('state')->nullable()->default(false);
-            $table->float('last_kwh')->nullable()->default(0);
+            $table->decimal('last_kwh', 9, 5)->nullable()->default(0.0000);
             $table->timestamps();
         });
     }
