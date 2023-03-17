@@ -38,13 +38,17 @@ class runDevice extends Command
                 $get_diff_hour = ($time_last_change->diffInSeconds(now()))/3600;
 
                 $kwh = round(($get_diff_hour * $device->watt)/1000, 5) + ($device->last_kwh);
+                $watt = $device->watt;
             } else {
                 $kwh = round($device->last_kwh/1000, 5);
+                $watt = 0;
             }
 
             DB::table('device_usages')->insert([
                 ["device_id"=>$device->id,
                     "kwh"=>$kwh,
+                    "watt"=>$watt,
+                    "state"=>$device->state,
                     "created_at"=>now()
                 ]
             ]);

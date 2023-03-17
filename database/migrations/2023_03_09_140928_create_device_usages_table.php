@@ -14,7 +14,10 @@ return new class extends Migration
         Schema::create('device_usages', function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger('device_id');
+            $table->float('watt')->nullable()->default(0);
+            // $table->float('total_watt', 9, 5)->nullable()->default(0.0000);
             $table->decimal('kwh', 9, 5)->nullable()->default(0.0000);
+            $table->boolean('state');
             $table->dateTime('created_at');
         });
     }
