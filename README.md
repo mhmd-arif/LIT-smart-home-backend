@@ -12,17 +12,20 @@ Smart Home - LIT adalah project untuk menampilkan dashboard dan device managemen
 <hr/>
 
 ## ⚙ Setting Up Project
-1. Clone the repo:
+- Clone the repo:
 ```````````
 git clone https://github.com/mhmd-arif/LIT-smart-home-backend.git
 ```````````
-2. Install required dependencies:
+- Install update laravel:
 ```````````
 composer global require laravel/installer
+```````````
+- Install required dependencies:
+```````````
 composer install
 ```````````
-3. Copy paste file .env | .env.example or make your own .env
-4. Generate key:
+- Copy paste file .env | .env.example or make your own .env
+- Generate key:
 ```````````
 php artisan key:generate
 ```````````
@@ -30,7 +33,7 @@ php artisan key:generate
 ``````````
 php artisan migrate | php artisan migrate:fresh --seed
 ``````````
-- Start serve:
+- Start server:
 ``````````
 php artisan serve
 ``````````
