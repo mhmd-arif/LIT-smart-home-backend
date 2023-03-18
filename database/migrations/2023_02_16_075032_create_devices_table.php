@@ -13,8 +13,8 @@ return new class extends Migration
     {
         Schema::create('devices', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('user_id')->nullable();
-            $table->string('device_name', 100)->nullable()->default('device_name');
+            $table->unsignedBigInteger('user_id');
+            $table->string('device_name', 100)->default('device_name');
             $table->string('category', 100)->nullable()->default('category');
             $table->boolean('is_favorite')->nullable()->default(false);
             $table->float('volt')->nullable()->default(0);

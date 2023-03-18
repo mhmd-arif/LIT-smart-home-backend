@@ -24,15 +24,16 @@ use App\Http\Controllers\Api\AuthController;
 
 
 // device
+Route::apiResource('devices', DeviceController::class);
 Route::patch('devices/update_state/{id}', [DeviceController::class, 'updateState']);
-route::apiResource('devices', DeviceController::class);
+Route::patch('devices/update_favorite/{id}', [DeviceController::class, 'updateFavorite']);
 
 // device usage
-route::apiResource('device_usages', DeviceUsageController::class);
+Route::apiResource('device_usages', DeviceUsageController::class);
 Route::post('device_usages/create', [DeviceUsageController::class, 'createUsage']);
 
 // user
-route::apiResource('users', UserController::class);
+Route::apiResource('users', UserController::class);
 
 // auth
 Route::post('auth/login', [AuthController::class, 'login']);

@@ -62,14 +62,30 @@ class DeviceController extends Controller
             'state' => 'required',
         ]);
 
-        $last_kwh = DeviceUsage::orderBy('created_at', 'desc')->where("device_id", $id)->first()->kwh;
+        // $last_kwh = DeviceUsage::orderBy('created_at', 'desc')->where("device_id", $id)->first()->;
 
         $device = Device::where("id", $id)->update([
             "state" => $request->state,
-            "last_kwh" => $last_kwh,
+            // "last_kwh" => $last_kwh,
         ]);
 
         $device = Device::find($id);
+
+        return response()->json($device);
+    }
+
+    public function updateFavorite(Request $request, $id)
+    {
+        $request -> validate([
+            'is_favorite' => 'required',
+        ]);
+
+        $device = Device::where("id", $id)->update([
+            "is_favorite" => $request->is_favorite,
+        ]);
+
+        $device = Device::find($id);
+
         return response()->json($device);
     }
 
