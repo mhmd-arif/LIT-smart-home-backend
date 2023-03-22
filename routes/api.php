@@ -5,6 +5,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Api\DeviceController;
 use App\Http\Controllers\Api\UserController;
 use App\Http\Controllers\Api\DeviceUsageController;
+use App\Http\Controllers\Api\TotalUsageController;
 use App\Http\Controllers\Api\AuthController;
 
 /*
@@ -32,7 +33,8 @@ Route::patch('devices/update_favorite/{id}', [DeviceController::class, 'updateFa
 Route::apiResource('device_usages', DeviceUsageController::class);
 Route::post('device_usages/create', [DeviceUsageController::class, 'createUsage']);
 Route::get('device_usages/get_usage/{id}', [DeviceUsageController::class, 'getUsage']);
-// Route::get('device_usages/get_usage_all', [DeviceUsageController::class, 'getUsageAll']);
+
+Route::get('total_usage', [TotalUsageController::class, 'getTotalUsage']);
 
 // user
 Route::apiResource('users', UserController::class);

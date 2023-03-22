@@ -3,10 +3,10 @@
 namespace App\Console\Commands;
 
 use Illuminate\Console\Command;
-use Illuminate\Support\Facades\DB;
 use App\Models\Device;
 use App\Models\User;
 use App\Models\DeviceUsage;
+use Illuminate\Support\Facades\DB;
 use Carbon\Carbon;
 
 
@@ -32,6 +32,10 @@ class runDevice extends Command
     public function handle(): void
     {   
         $devices = DB::table('devices')->get();
+
+        $total_kwh = 0;
+        $total_watt = 0;
+
         foreach ($devices as $device)
         {
             if($device->state==1){
@@ -41,9 +45,19 @@ class runDevice extends Command
 
                 $kwh = round(($get_diff_hour * $device->watt)/1000, 5) + ($device->last_kwh);
                 $watt = $device->watt;
+
+                var_dump("A");
+                var_dump(round(($get_diff_hour * $device->watt)/1000, 5));
+                var_dump($device->last_kwh);
+                var_dump($kwh);
+
             } else {
                 $kwh = round($device->last_kwh/1000, 5);
                 $watt = 0;
+
+                var_dump("B");
+                var_dump($device->last_kwh);
+                var_dump($kwh);
             }
 
             DB::table('device_usages')->insert([
@@ -54,10 +68,22 @@ class runDevice extends Command
                     "created_at"=>now()
                 ]
             ]);
+
+            $total_kwh = round($total_kwh + $kwh, 5);
+            $total_watt += $watt;
         }
         
-        // $cek = Device::find(2)->deviceUsage;
-        // dd($cek);
+        DB::table('total_usages')->insert([
+            ["total_kwh"=>$total_kwh,
+                "total_watt"=>$total_watt,
+                "created_at"=>now(),
+            ]
+        ]);
+
+        // $usage = Device::find(2)->deviceUsage->last();
+
+
+        // dd($usage);
     }
 }
 

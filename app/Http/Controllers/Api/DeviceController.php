@@ -6,6 +6,8 @@ use App\Http\Controllers\Controller;
 use App\Models\Device;
 use App\Models\DeviceUsage;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
+use Carbon\Carbon;
 
 class DeviceController extends Controller
 {
