@@ -41,9 +41,9 @@ class DeviceController extends Controller
             'user_id' => 'required|exists:users,id',
             'device_name' => 'required',
             'category' => 'required',
-            'volt' => 'required',
-            'ampere' => 'required',
-            'watt' => 'required',
+            'volt' => 'required|numeric',
+            'ampere' => 'required|numeric',
+            'watt' => 'required|numeric',
         ]);
 
         $device->device_name = $request->device_name;
