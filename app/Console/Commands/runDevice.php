@@ -56,7 +56,7 @@ class runDevice extends Command
             ]);
         }
         
-        // $cek = Device::find(2)->deviceUsage->last()->kwh;
+        // $cek = Device::find(2)->deviceUsage;
         // dd($cek);
     }
 }

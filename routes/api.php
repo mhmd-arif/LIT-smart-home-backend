@@ -31,6 +31,8 @@ Route::patch('devices/update_favorite/{id}', [DeviceController::class, 'updateFa
 // device usage
 Route::apiResource('device_usages', DeviceUsageController::class);
 Route::post('device_usages/create', [DeviceUsageController::class, 'createUsage']);
+Route::get('device_usages/get_usage/{id}', [DeviceUsageController::class, 'getUsage']);
+// Route::get('device_usages/get_usage_all', [DeviceUsageController::class, 'getUsageAll']);
 
 // user
 Route::apiResource('users', UserController::class);

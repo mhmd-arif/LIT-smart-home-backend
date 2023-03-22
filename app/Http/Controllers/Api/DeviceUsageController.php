@@ -46,9 +46,11 @@ class DeviceUsageController extends Controller
         return response()->json(['message'=>'device_usage created successfully']);
     }
 
-    public function show(DeviceUsage $device_usage)
+    // get usage (watt and kwh) per divice with the time
+    public function getUsage($id)
     {
-        return $device_usage;
+        $usages = Device::find($id)->deviceUsage;
+        return response()->json($usages);
     }
 
     public function destroy(DeviceUsage $device_usage)
