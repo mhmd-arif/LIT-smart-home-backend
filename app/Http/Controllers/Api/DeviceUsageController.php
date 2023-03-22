@@ -20,6 +20,10 @@ class DeviceUsageController extends Controller
     public function createUsage()
     {
         $devices = DB::table('devices')->get();
+
+        $total_kwh = 0;
+        $total_watt = 0;
+
         foreach ($devices as $device)
         {
             if($device->state==1){
@@ -42,11 +46,27 @@ class DeviceUsageController extends Controller
                     "created_at"=>now()
                 ]
             ]);
+
+            $total_kwh = round($total_kwh + $kwh, 5);
+            $total_watt += $watt;
         }
+        
+        DB::table('total_usages')->insert([
+            ["total_kwh"=>$total_kwh,
+                "total_watt"=>$total_watt,
+                "created_at"=>now(),
+            ]
+        ]);
+
         return response()->json(['message'=>'device_usage created successfully']);
     }
 
-    // get usage (watt and kwh) per divice with the time
+    public function show(DeviceUsage $device_usage)
+    {
+        return $device_usage;
+    }
+
+    // get usage (watt and kwh) PER DEVICE with the timeline
     public function getUsage($id)
     {
         $usages = Device::find($id)->deviceUsage;
@@ -56,7 +76,6 @@ class DeviceUsageController extends Controller
     public function destroy(DeviceUsage $device_usage)
     {
         $device_usage->delete();
-
         return response()-> json(['message'=>'device_usage delete successfully']);
     }
 }

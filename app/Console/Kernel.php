@@ -13,7 +13,7 @@ class Kernel extends ConsoleKernel
      */
     protected function schedule(Schedule $schedule): void
     {
-        $schedule->command('run:device')->cron('*/2 * * * *');
+        $schedule->command('run:device')->cron('*/1 * * * *');
     }
 
     /**
