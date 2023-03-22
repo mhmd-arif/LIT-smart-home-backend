@@ -5,8 +5,10 @@ namespace App\Console\Commands;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\DB;
 use App\Models\Device;
+use App\Models\User;
 use App\Models\DeviceUsage;
 use Carbon\Carbon;
+
 
 class runDevice extends Command
 {
@@ -53,6 +55,9 @@ class runDevice extends Command
                 ]
             ]);
         }
+        $device = Device::find(1)->phone;
+        $user = Device::find(1)->user;
+        dd($user);
     }
 }
 
