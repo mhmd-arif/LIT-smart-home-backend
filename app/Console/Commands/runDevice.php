@@ -55,9 +55,9 @@ class runDevice extends Command
                 ]
             ]);
         }
-        $device = Device::find(1)->phone;
-        $user = Device::find(1)->user;
-        dd($user);
+        
+        // $cek = Device::find(2)->deviceUsage->last()->kwh;
+        // dd($cek);
     }
 }
 
