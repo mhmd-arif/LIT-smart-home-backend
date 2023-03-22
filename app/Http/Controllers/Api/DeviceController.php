@@ -62,11 +62,11 @@ class DeviceController extends Controller
             'state' => 'required',
         ]);
 
-        // $last_kwh = DeviceUsage::orderBy('created_at', 'desc')->where("device_id", $id)->first()->;
+        $last_kwh = Device::find($id)->deviceUsage->last()->kwh;
 
         $device = Device::where("id", $id)->update([
             "state" => $request->state,
-            // "last_kwh" => $last_kwh,
+            "last_kwh" => $last_kwh,
         ]);
 
         $device = Device::find($id);
