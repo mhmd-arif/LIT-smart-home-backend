@@ -11,7 +11,7 @@ class DeviceController extends Controller
 {
     public function index()
     {
-        $devices = Device::paginate();
+        $devices = Device::orderBy('is_favorite', 'desc')->paginate();
         return response()->json($devices);
     }
 
@@ -91,9 +91,8 @@ class DeviceController extends Controller
 
     public function destroy(Device $device)
     {
-        $device->delete();
-
-        return response()-> json(['message'=>'device delete successfully']);
+        $device->delete(); 
+        return response()-> json($device);
     }
 }
 
