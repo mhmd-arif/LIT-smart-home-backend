@@ -64,7 +64,18 @@ class DeviceController extends Controller
             'state' => 'required',
         ]);
 
-        $last_kwh = Device::find($id)->deviceUsage->last()->kwh;
+        $device = Device::find($id);
+        $usage = Device::find($id)->deviceUsage->last();
+
+        if($usage->state == 1)
+        {
+            $time_last_change = (new Carbon($usage->created_at))->toImmutable()->setTimezone('Asia/Jakarta');
+            $get_diff_hour = ($time_last_change->diffInSeconds(now()))/3600;
+            $last_kwh = round(($get_diff_hour * $device->watt)/1000, 5) + ($usage->kwh);
+        }else if($usage->state == 0)
+        {
+            $last_kwh = $usage->kwh;
+        }
 
         $device = Device::where("id", $id)->update([
             "state" => $request->state,

@@ -52,7 +52,7 @@ class runDevice extends Command
                 var_dump($kwh);
 
             } else {
-                $kwh = round($device->last_kwh/1000, 5);
+                $kwh = round($device->last_kwh, 5);
                 $watt = 0;
 
                 var_dump("B");
@@ -81,8 +81,6 @@ class runDevice extends Command
         ]);
 
         // $usage = Device::find(2)->deviceUsage->last();
-
-
         // dd($usage);
     }
 }
