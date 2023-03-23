@@ -45,19 +45,9 @@ class runDevice extends Command
 
                 $kwh = round(($get_diff_hour * $device->watt)/1000, 5) + ($device->last_kwh);
                 $watt = $device->watt;
-
-                var_dump("A");
-                var_dump(round(($get_diff_hour * $device->watt)/1000, 5));
-                var_dump($device->last_kwh);
-                var_dump($kwh);
-
             } else {
                 $kwh = round($device->last_kwh, 5);
                 $watt = 0;
-
-                var_dump("B");
-                var_dump($device->last_kwh);
-                var_dump($kwh);
             }
 
             DB::table('device_usages')->insert([
@@ -79,9 +69,6 @@ class runDevice extends Command
                 "created_at"=>now(),
             ]
         ]);
-
-        // $usage = Device::find(2)->deviceUsage->last();
-        // dd($usage);
-    }
+    }   
 }
 
