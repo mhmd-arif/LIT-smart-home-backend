@@ -29,12 +29,17 @@ Route::apiResource('devices', DeviceController::class);
 Route::patch('devices/update_state/{id}', [DeviceController::class, 'updateState']);
 Route::patch('devices/update_favorite/{id}', [DeviceController::class, 'updateFavorite']);
 
-// device usage
+// device usage per device
 Route::apiResource('device_usages', DeviceUsageController::class);
 Route::post('device_usages/create', [DeviceUsageController::class, 'createUsage']);
 Route::get('device_usages/get_usage/{id}', [DeviceUsageController::class, 'getUsage']);
 
+// usages total all device
 Route::get('total_usage', [TotalUsageController::class, 'getTotalUsage']);
+Route::get('total_usage/hourly', [TotalUsageController::class, 'getTotalUsageHourly']);
+Route::get('total_usage/daily', [TotalUsageController::class, 'getTotalUsageDaily']);
+Route::get('total_usage/weekly', [TotalUsageController::class, 'getTotalUsageWeekly']);
+Route::get('total_usage/monthly', [TotalUsageController::class, 'getTotalUsageMonthly']);
 
 // user
 Route::apiResource('users', UserController::class);
