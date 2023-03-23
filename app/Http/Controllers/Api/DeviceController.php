@@ -26,6 +26,7 @@ class DeviceController extends Controller
             'volt' => 'required',
             'ampere' => 'required',
             'watt' => 'required',
+            'icon_url' => 'required'
         ]);
 
         $device = Device::create($request->all());
@@ -46,6 +47,7 @@ class DeviceController extends Controller
             'volt' => 'required|numeric',
             'ampere' => 'required|numeric',
             'watt' => 'required|numeric',
+            'icon_url' => 'required'
         ]);
 
         $device->device_name = $request->device_name;
@@ -53,6 +55,7 @@ class DeviceController extends Controller
         $device->volt = $request->volt;
         $device->ampere = $request->ampere;
         $device->watt = $request->watt;   
+        $device->icon_url = $request->icon_url;   
         $device->save();
 
         return response()->json($device);
@@ -72,6 +75,7 @@ class DeviceController extends Controller
             $time_last_change = (new Carbon($usage->created_at))->toImmutable()->setTimezone('Asia/Jakarta');
             $get_diff_hour = ($time_last_change->diffInSeconds(now()))/3600;
             $last_kwh = round(($get_diff_hour * $device->watt)/1000, 5) + ($usage->kwh);
+            
         }else if($usage->state == 0)
         {
             $last_kwh = $usage->kwh;
