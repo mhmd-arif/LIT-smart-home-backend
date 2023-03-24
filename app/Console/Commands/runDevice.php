@@ -61,6 +61,10 @@ class runDevice extends Command
 
             $total_kwh = round($total_kwh + $kwh, 5);
             $total_watt += $watt;
+
+            Device::where("id", $device->id)->update([
+                "last_kwh" => $kwh,
+            ]);
         }
         
         DB::table('total_usages')->insert([
