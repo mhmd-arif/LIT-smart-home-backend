@@ -18,8 +18,10 @@ class TotalUsageController extends Controller
 
     public function getTotalUsageHourly()
     {
-        $usage_hourly = DB::table('total_usages')
-            ->select(DB::raw('DATE_FORMAT(created_at, "%Y-%m-%d %H:00:00") as hour'), DB::raw('SUM(total_kwh) as hourly_kwh'), DB::raw('MAX(total_watt) as hourly_watt'))
+        $usage = DB::table('total_usages')
+            ->select(DB::raw('DATE_FORMAT(created_at, "%Y-%m-%d %H:00:00") as hour'), 
+                    DB::raw('SUM(total_kwh) as total_kwh'), 
+                    DB::raw('MAX(total_watt) as peak_power'))
             ->groupBy('hour')
             ->get();        
 
@@ -28,38 +30,38 @@ class TotalUsageController extends Controller
 
     public function getTotalUsageDaily()
     {
-        $usage_daily = DB::table('total_usages')
+        $usage = DB::table('total_usages')
             ->select(DB::raw('DATE(created_at) as date'), 
-                    DB::raw('SUM(total_kwh) as daily_kwh'), 
-                    DB::raw('MAX(total_watt) as daily_watt'))
+                    DB::raw('SUM(total_kwh) as total_kwh'), 
+                    DB::raw('MAX(total_watt) as peak_power'))
             ->groupBy('date')
             ->get();        
 
-        return response()->json($usage_daily);
+        return response()->json($usage);
     }
 
     public function getTotalUsageWeekly()
     {
-        $usage_weekly = DB::table('total_usages')
+        $usage = DB::table('total_usages')
             ->select(DB::raw('YEARWEEK(created_at) as week'), 
-                    DB::raw('SUM(total_kwh) as weekly_kwh'), 
-                    DB::raw('MAX(total_watt) as weekly_watt'))
+                    DB::raw('SUM(total_kwh) as total_kwh'), 
+                    DB::raw('MAX(total_watt) as peak_power'))
             ->groupBy('week')
             ->get();        
 
-        return response()->json($usage_weekly);
+        return response()->json($usage);
     }
 
     public function getTotalUsageMonthly()
     {
-        $usage_monthly = DB::table('total_usages')
+        $usage = DB::table('total_usages')
             ->select(DB::raw('DATE_FORMAT(created_at, "%Y-%m") as month'), 
-                    DB::raw('SUM(total_kwh) as monthly_kwh'), 
-                    DB::raw('MAX(total_watt) as monthly_watt'))
+                    DB::raw('SUM(total_kwh) as total_kwh'), 
+                    DB::raw('MAX(total_watt) as peak_power'))
             ->groupBy('month')
             ->get();        
 
-        return response()->json($usage_monthly);
+        return response()->json($usage);
     }
 }
 
