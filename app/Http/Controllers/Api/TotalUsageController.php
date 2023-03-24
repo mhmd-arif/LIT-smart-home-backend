@@ -20,22 +20,22 @@ class TotalUsageController extends Controller
     {
         $usage = DB::table('total_usages')
             ->select(DB::raw('DATE_FORMAT(created_at, "%Y-%m-%d %H:00:00") as hour'), 
-                    DB::raw('SUM(total_kwh) as total_kwh'), 
-                    DB::raw('MAX(total_watt) as peak_power'))
+                    DB::raw('SUM(kwh) as kwh'), 
+                    DB::raw('MAX(watt) as watt'))
             ->groupBy('hour')
-            ->get();        
+            ->paginate();;        
 
-        return response()->json($usage_hourly);
+        return response()->json($usage);
     }
 
     public function getTotalUsageDaily()
     {
         $usage = DB::table('total_usages')
             ->select(DB::raw('DATE(created_at) as date'), 
-                    DB::raw('SUM(total_kwh) as total_kwh'), 
-                    DB::raw('MAX(total_watt) as peak_power'))
+                    DB::raw('SUM(kwh) as kwh'), 
+                    DB::raw('MAX(watt) as watt'))
             ->groupBy('date')
-            ->get();        
+            ->paginate();;        
 
         return response()->json($usage);
     }
@@ -44,10 +44,10 @@ class TotalUsageController extends Controller
     {
         $usage = DB::table('total_usages')
             ->select(DB::raw('YEARWEEK(created_at) as week'), 
-                    DB::raw('SUM(total_kwh) as total_kwh'), 
-                    DB::raw('MAX(total_watt) as peak_power'))
+                    DB::raw('SUM(kwh) as kwh'), 
+                    DB::raw('MAX(watt) as watt'))
             ->groupBy('week')
-            ->get();        
+            ->paginate();;        
 
         return response()->json($usage);
     }
@@ -56,10 +56,10 @@ class TotalUsageController extends Controller
     {
         $usage = DB::table('total_usages')
             ->select(DB::raw('DATE_FORMAT(created_at, "%Y-%m") as month'), 
-                    DB::raw('SUM(total_kwh) as total_kwh'), 
-                    DB::raw('MAX(total_watt) as peak_power'))
+                    DB::raw('SUM(kwh) as kwh'), 
+                    DB::raw('MAX(watt) as watt'))
             ->groupBy('month')
-            ->get();        
+            ->paginate();;        
 
         return response()->json($usage);
     }

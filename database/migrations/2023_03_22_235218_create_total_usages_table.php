@@ -13,8 +13,8 @@ return new class extends Migration
     {
         Schema::create('total_usages', function (Blueprint $table) {
             $table->id();
-            $table->float('total_watt')->nullable()->default(0);            
-            $table->decimal('total_kwh', 9, 5)->nullable()->default(0.0000);
+            $table->float('watt')->nullable()->default(0);            
+            $table->decimal('kwh', 9, 5)->nullable()->default(0.0000);
             $table->timestamps();
         });
     }

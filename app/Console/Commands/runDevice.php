@@ -68,8 +68,8 @@ class runDevice extends Command
         }
         
         DB::table('total_usages')->insert([
-            ["total_kwh"=>$total_kwh,
-                "total_watt"=>$total_watt,
+            ["kwh"=>$total_kwh,
+                "watt"=>$total_watt,
                 "created_at"=>now(),
             ]
         ]);

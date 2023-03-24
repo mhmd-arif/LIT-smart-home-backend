@@ -13,7 +13,7 @@ class DeviceUsageController extends Controller
 {
     public function index()
     {
-        $device_usages = DeviceUsage::paginate();
+        $device_usages = DeviceUsage::paginate(1000);
         return response()->json($device_usages);
     }
 
@@ -56,8 +56,8 @@ class DeviceUsageController extends Controller
         }
         
         DB::table('total_usages')->insert([
-            ["total_kwh"=>$total_kwh,
-                "total_watt"=>$total_watt,
+            ["kwh"=>$total_kwh,
+                "watt"=>$total_watt,
                 "created_at"=>now(),
             ]
         ]);
