@@ -34,7 +34,7 @@ class DeviceUsageController extends Controller
                 $kwh = round(($get_diff_hour * $device->watt)/1000, 5) + ($device->last_kwh);
                 $watt = $device->watt;
             } else {
-                $kwh = round($device->last_kwh/1000, 5);
+                $kwh = round($device->last_kwh, 5);
                 $watt = 0;
             }
 
@@ -49,6 +49,10 @@ class DeviceUsageController extends Controller
 
             $total_kwh = round($total_kwh + $kwh, 5);
             $total_watt += $watt;
+
+            Device::where("id", $device->id)->update([
+                "last_kwh" => $kwh,
+            ]);
         }
         
         DB::table('total_usages')->insert([
