@@ -35,11 +35,11 @@ Route::post('device_usages/create', [DeviceUsageController::class, 'createUsage'
 Route::get('device_usages/get_usage/{id}', [DeviceUsageController::class, 'getUsage']);
 
 // usages total all device
-Route::get('total_usage', [TotalUsageController::class, 'getTotalUsage']);
-Route::get('total_usage/hourly', [TotalUsageController::class, 'getTotalUsageHourly']);
-Route::get('total_usage/daily', [TotalUsageController::class, 'getTotalUsageDaily']);
-Route::get('total_usage/weekly', [TotalUsageController::class, 'getTotalUsageWeekly']);
-Route::get('total_usage/monthly', [TotalUsageController::class, 'getTotalUsageMonthly']);
+Route::get('total_usages', [TotalUsageController::class, 'getTotalUsage']);
+Route::get('total_usages/hourly', [TotalUsageController::class, 'getTotalUsageHourly']);
+Route::get('total_usages/daily', [TotalUsageController::class, 'getTotalUsageDaily']);
+Route::get('total_usages/weekly', [TotalUsageController::class, 'getTotalUsageWeekly']);
+Route::get('total_usages/monthly', [TotalUsageController::class, 'getTotalUsageMonthly']);
 
 // user
 Route::apiResource('users', UserController::class);
