@@ -12,7 +12,7 @@ class TotalUsageController extends Controller
 {
     public function getTotalUsage()
     {
-        $total_usages = DB::table('total_usages')->get();
+        $total_usages = DB::table('total_usages')->paginate();
         return response()->json($total_usages);
     }
 
