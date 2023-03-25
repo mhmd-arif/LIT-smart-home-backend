@@ -36,7 +36,7 @@ Route::get('device_usages/get_usage/{id}', [DeviceUsageController::class, 'getUs
 
 // usages total all device
 Route::get('total_usages', [TotalUsageController::class, 'getTotalUsage']);
-Route::get('total_usages/hourly', [TotalUsageController::class, 'getTotalUsageHourly']);
+Route::get('total_usages/hourly/{id}', [TotalUsageController::class, 'getTotalUsageHourly']);
 Route::get('total_usages/daily', [TotalUsageController::class, 'getTotalUsageDaily']);
 Route::get('total_usages/weekly', [TotalUsageController::class, 'getTotalUsageWeekly']);
 Route::get('total_usages/monthly', [TotalUsageController::class, 'getTotalUsageMonthly']);
