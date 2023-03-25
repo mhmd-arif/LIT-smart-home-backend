@@ -12,8 +12,12 @@ class TotalUsageController extends Controller
 {
     public function getTotalUsage()
     {
-        $total_usages = DB::table('total_usages')->paginate();
-        return response()->json($total_usages);
+        $total_usages = DB::table('total_usages')->get();
+        return response()->json([
+            'success' => true,
+            'message'=>'Device usages created successfully',
+            'data' => $total_usages
+        ], 200);
     }
 
     public function getTotalUsageHourly()
@@ -23,9 +27,13 @@ class TotalUsageController extends Controller
                     DB::raw('SUM(kwh) as kwh'), 
                     DB::raw('MAX(watt) as watt'))
             ->groupBy('hour')
-            ->paginate();;        
+            ->get();        
 
-        return response()->json($usage);
+        return response()->json([
+            'success' => true,
+            'message'=>'Device hou usages created successfully',
+            'data' => $usage
+        ], 200);
     }
 
     public function getTotalUsageDaily()
@@ -35,9 +43,13 @@ class TotalUsageController extends Controller
                     DB::raw('SUM(kwh) as kwh'), 
                     DB::raw('MAX(watt) as watt'))
             ->groupBy('date')
-            ->paginate();;        
+            ->get();       
 
-        return response()->json($usage);
+        return response()->json([
+            'success' => true,
+            'message'=>'Device daily usages created successfully',
+            'data' => $usage
+        ], 200);
     }
 
     public function getTotalUsageWeekly()
@@ -47,9 +59,13 @@ class TotalUsageController extends Controller
                     DB::raw('SUM(kwh) as kwh'), 
                     DB::raw('MAX(watt) as watt'))
             ->groupBy('week')
-            ->paginate();;        
+            ->get();        
 
-        return response()->json($usage);
+        return response()->json([
+            'success' => true,
+            'message'=>'Device weekly usages created successfully',
+            'data' => $usage
+        ], 200);
     }
 
     public function getTotalUsageMonthly()
@@ -59,9 +75,13 @@ class TotalUsageController extends Controller
                     DB::raw('SUM(kwh) as kwh'), 
                     DB::raw('MAX(watt) as watt'))
             ->groupBy('month')
-            ->paginate();;        
+            ->get();      
 
-        return response()->json($usage);
+        return response()->json([
+            'success' => true,
+            'message'=>'Device monthly usages created successfully',
+            'data' => $usage
+        ], 200);
     }
 }
 

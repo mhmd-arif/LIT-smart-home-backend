@@ -13,8 +13,12 @@ class DeviceUsageController extends Controller
 {
     public function index()
     {
-        $device_usages = DeviceUsage::paginate(1000);
-        return response()->json($device_usages);
+        $device_usages = DeviceUsage::get();
+        return response()->json([
+            'success' => true,
+            'message' => 'Device usages is fetched successfully',
+            'data' => $device_usages
+        ], 200);
     }
 
     public function createUsage()
@@ -62,25 +66,39 @@ class DeviceUsageController extends Controller
             ]
         ]);
 
-        return response()->json(['message'=>'device_usage created successfully']);
+        return response()->json([
+            'success' => true,
+            'message'=>'Device usages created successfully'
+        ], 200);
     }
 
     public function show(DeviceUsage $device_usage)
     {
-        return $device_usage;
+        return response()->json([
+            'success' => true,
+            'message'=>'Device usage is fetched successfully',
+            'data' => $device_usage
+        ], 200);
     }
 
     // get usage (watt and kwh) PER DEVICE with the timeline
     public function getUsage($id)
     {
         $usages = Device::find($id)->deviceUsage;
-        return response()->json($usages);
+        return response()->json([
+            'success' => true,
+            'message'=>'Device usage by is fetched successfully',
+            'data' => $usages
+        ], 200);
     }
 
     public function destroy(DeviceUsage $device_usage)
     {
         $device_usage->delete();
-        return response()-> json(['message'=>'device_usage delete successfully']);
+        return response()-> json([
+            'success' => true,
+            'message'=>'Device usage is deleted successfully'
+        ], 200);
     }
 }
 

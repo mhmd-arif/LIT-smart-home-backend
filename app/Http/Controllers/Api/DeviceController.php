@@ -13,8 +13,12 @@ class DeviceController extends Controller
 {
     public function index()
     {
-        $devices = Device::orderBy('is_favorite', 'desc')->paginate();
-        return response()->json($devices);
+        $devices = Device::orderBy('is_favorite', 'desc')->get();
+        return response()->json([
+            'success' => true,
+            'message'=>'Devices is fetched successfully',
+            'data' => $devices
+        ], 200);
     }
 
     public function store(Request $request)
@@ -30,12 +34,20 @@ class DeviceController extends Controller
         ]);
 
         $device = Device::create($request->all());
-        return response()->json($device);
+        return response()->json([
+            'success' => true,
+            'message'=>'Device is created successfully',
+            'data' => $device
+        ], 200);
     }
 
     public function show(Device $device)
     {
-        return $device;
+        return response()->json([
+            'success' => true,
+            'message'=>'Your device (' . $device->device_name . ') is found',
+            'data' => $device
+        ], 200);;
     }
 
     public function update(Device $device, Request $request)
@@ -58,7 +70,11 @@ class DeviceController extends Controller
         $device->icon_url = $request->icon_url;   
         $device->save();
 
-        return response()->json($device);
+        return response()->json([
+            'success' => true,
+            'message'=>'Your device (' . $device->device_name . ') is updated succesfully',
+            'data' => $device
+        ], 200);
     }
 
     public function updateState(Request $request, $id)
@@ -108,7 +124,11 @@ class DeviceController extends Controller
     public function destroy(Device $device)
     {
         $device->delete(); 
-        return response()-> json($device);
+        return response()-> json([
+            'success' => true,
+            'message'=>'Your device (' . $device->device_name . ') is deleted successfully',
+            'data' => $device
+        ], 200);
     }
 }
 
