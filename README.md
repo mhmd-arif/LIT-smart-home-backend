@@ -16,6 +16,8 @@ Smart Home - LIT adalah project untuk menampilkan dashboard dan device managemen
 ```````````
 git clone https://github.com/mhmd-arif/LIT-smart-home-backend.git
 ```````````
+- start MySQL from XAMPP:
+
 - Install update laravel:
 ```````````
 composer global require laravel/installer
@@ -25,6 +27,7 @@ composer global require laravel/installer
 composer install
 ```````````
 - Copy paste file .env | .env.example or make your own .env
+
 - Generate key:
 ```````````
 php artisan key:generate
