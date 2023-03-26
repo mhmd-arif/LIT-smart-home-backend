@@ -19,10 +19,10 @@ class TotalUsageController extends Controller
     {
         try {
             $today = date('Y-m-d H:i:s');
-            $yesterday = date('Y-m-d H:i:s', strtotime('-1 day'));
+            $yesterday = date('Y-m-d', strtotime('-1 day'));
             $total_usages = DB::table('total_usages')->whereBetween('created_at', [$yesterday, $today])->get();
 
-            return response()->json([
+            return response()->orderBy('hour', 'asc')->json([
                 'success' => true,
                 'message' => 'Device usages created successfully',
                 'data' => $total_usages
@@ -36,7 +36,7 @@ class TotalUsageController extends Controller
     {
         try {
             $today = date('Y-m-d H:i:s');
-            $yesterday = date('Y-m-d H:i:s', strtotime('-1 day'));
+            $yesterday = date('Y-m-d', strtotime('-1 day'));
             $usage = DB::table('total_usages')
                 ->whereBetween('created_at', [$yesterday, $today])
                 ->select(
@@ -46,6 +46,7 @@ class TotalUsageController extends Controller
                     DB::raw('MAX(watt) as watt')
                 )
                 ->groupBy('hour', 'date')
+                ->orderBy('hour', 'asc')
                 ->get();
 
             $devices = DB::table('device_usages')
@@ -58,6 +59,7 @@ class TotalUsageController extends Controller
                     DB::raw('MAX(watt) as watt')
                 )
                 ->groupBy('hour', 'device_id', 'date')
+                ->orderBy('hour', 'asc')
                 ->get();
 
             return response()->json([
@@ -77,7 +79,7 @@ class TotalUsageController extends Controller
     {
         try {
             $today = date('Y-m-d H:i:s');
-            $yesterday = date('Y-m-d H:i:s', strtotime('-1 day'));
+            $yesterday = date('Y-m-d', strtotime('-7 day'));
             $usage = DB::table('total_usages')
                 ->whereBetween('created_at', [$yesterday, $today])
                 ->select(
@@ -86,6 +88,7 @@ class TotalUsageController extends Controller
                     DB::raw('MAX(watt) as watt')
                 )
                 ->groupBy('date')
+                ->orderBy('date', 'asc')
                 ->get();
 
             $devices = DB::table('device_usages')
@@ -97,6 +100,7 @@ class TotalUsageController extends Controller
                     DB::raw('MAX(watt) as watt')
                 )
                 ->groupBy('date', 'device_id')
+                ->orderBy('date', 'asc')
                 ->get();
 
             return response()->json([
@@ -116,7 +120,7 @@ class TotalUsageController extends Controller
     {
         try {
             $today = date('Y-m-d H:i:s');
-            $yesterday = date('Y-m-d H:i:s', strtotime('-1 day'));
+            $yesterday = date('Y-m-d', strtotime('-30 day'));
             $usage = DB::table('total_usages')
                 ->whereBetween('created_at', [$yesterday, $today])
                 ->select(
@@ -125,6 +129,7 @@ class TotalUsageController extends Controller
                     DB::raw('MAX(watt) as watt')
                 )
                 ->groupBy('week')
+                ->orderBy('week', 'asc')
                 ->get();
 
             $devices = DB::table('device_usages')
@@ -136,6 +141,7 @@ class TotalUsageController extends Controller
                     DB::raw('MAX(watt) as watt')
                 )
                 ->groupBy('week', 'device_id')
+                ->orderBy('week', 'asc')
                 ->get();
 
             return response()->json([
@@ -155,7 +161,7 @@ class TotalUsageController extends Controller
     {
         try {
             $today = date('Y-m-d H:i:s');
-            $yesterday = date('Y-m-d H:i:s', strtotime('-1 day'));
+            $yesterday = date('Y-m-d', strtotime('-365 day'));
             $usage = DB::table('total_usages')
                 ->whereBetween('created_at', [$yesterday, $today])
                 ->select(
@@ -164,6 +170,7 @@ class TotalUsageController extends Controller
                     DB::raw('MAX(watt) as watt')
                 )
                 ->groupBy('month')
+                ->orderBy('month', 'asc')
                 ->get();
 
             $devices = DB::table('device_usages')
@@ -175,6 +182,7 @@ class TotalUsageController extends Controller
                     DB::raw('MAX(watt) as watt')
                 )
                 ->groupBy('month', 'device_id')
+                ->orderBy('month', 'asc')
                 ->get();
 
             return response()->json([
