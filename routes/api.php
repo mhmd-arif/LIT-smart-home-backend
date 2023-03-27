@@ -3,7 +3,6 @@
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Api\DeviceController;
-use App\Http\Controllers\Api\UserController;
 use App\Http\Controllers\Api\DeviceUsageController;
 use App\Http\Controllers\Api\TotalUsageController;
 use App\Http\Controllers\Api\AuthController;
@@ -48,8 +47,8 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
     Route::get('total_usages/monthly', [TotalUsageController::class, 'getTotalUsageMonthly']);
 
     // crud user
-    Route::apiResource('users', UserController::class);
-    Route::get('auth/currentUser', [AuthController::class, 'getCurrentUser']);
+    Route::get('auth/current_user', [AuthController::class, 'getCurrentUser']);
+    Route::put('auth/update_user', [AuthController::class, 'updateUser']);
 
     Route::post('auth/logout', [AuthController::class, 'logout']);
 });

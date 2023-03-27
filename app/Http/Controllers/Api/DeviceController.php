@@ -57,7 +57,7 @@ class DeviceController extends Controller
                 'success' => true,
                 'message' => 'Your device (' . $device->device_name . ') is found',
                 'data' => $device
-            ], 200);;
+            ], 200);
         } catch (\Exception $e) {
             throw new HttpException(500, $e->getMessage());
         }
