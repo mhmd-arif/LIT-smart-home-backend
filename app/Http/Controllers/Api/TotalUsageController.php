@@ -22,7 +22,7 @@ class TotalUsageController extends Controller
             $yesterday = date('Y-m-d', strtotime('-1 day'));
             $total_usages = DB::table('total_usages')->whereBetween('created_at', [$yesterday, $today])->get();
 
-            return response()->orderBy('hour', 'asc')->json([
+            return response()->json([
                 'success' => true,
                 'message' => 'Device usages created successfully',
                 'data' => $total_usages
@@ -42,10 +42,13 @@ class TotalUsageController extends Controller
                 ->select(
                     DB::raw('DATE_FORMAT(created_at, "%H:00:00") as hour'),
                     DB::raw('DATE_FORMAT(created_at, "%Y-%m-%d") as date'),
+                    DB::raw('YEARWEEK(created_at) as week'),
+                    DB::raw('DATE_FORMAT(created_at, "%m") as month'),
+                    DB::raw('DATE_FORMAT(created_at, "%Y") as year'),
                     DB::raw('MAX(kwh) as kwh'),
                     DB::raw('MAX(watt) as watt')
                 )
-                ->groupBy('hour', 'date')
+                ->groupBy('hour', 'date', 'week', 'month', 'year')
                 ->orderBy('hour', 'asc')
                 ->get();
 
@@ -55,10 +58,13 @@ class TotalUsageController extends Controller
                     'device_id',
                     DB::raw('DATE_FORMAT(created_at, "%H:00:00") as hour'),
                     DB::raw('DATE_FORMAT(created_at, "%Y-%m-%d") as date'),
+                    DB::raw('YEARWEEK(created_at) as week'),
+                    DB::raw('DATE_FORMAT(created_at, "%m") as month'),
+                    DB::raw('DATE_FORMAT(created_at, "%Y") as year'),
                     DB::raw('MAX(kwh) as kwh'),
                     DB::raw('MAX(watt) as watt')
                 )
-                ->groupBy('hour', 'device_id', 'date')
+                ->groupBy('hour', 'device_id', 'date', 'week', 'month', 'year')
                 ->orderBy('hour', 'asc')
                 ->get();
 
@@ -84,10 +90,13 @@ class TotalUsageController extends Controller
                 ->whereBetween('created_at', [$yesterday, $today])
                 ->select(
                     DB::raw('DATE(created_at) as date'),
+                    DB::raw('YEARWEEK(created_at) as week'),
+                    DB::raw('DATE_FORMAT(created_at, "%m") as month'),
+                    DB::raw('DATE_FORMAT(created_at, "%Y") as year'),
                     DB::raw('MAX(kwh) as kwh'),
                     DB::raw('MAX(watt) as watt')
                 )
-                ->groupBy('date')
+                ->groupBy('date', 'week', 'month', 'year')
                 ->orderBy('date', 'asc')
                 ->get();
 
@@ -96,10 +105,13 @@ class TotalUsageController extends Controller
                 ->select(
                     'device_id',
                     DB::raw('DATE(created_at) as date'),
+                    DB::raw('YEARWEEK(created_at) as week'),
+                    DB::raw('DATE_FORMAT(created_at, "%m") as month'),
+                    DB::raw('DATE_FORMAT(created_at, "%Y") as year'),
                     DB::raw('MAX(kwh) as kwh'),
                     DB::raw('MAX(watt) as watt')
                 )
-                ->groupBy('date', 'device_id')
+                ->groupBy('date', 'device_id', 'week', 'month', 'year')
                 ->orderBy('date', 'asc')
                 ->get();
 
@@ -125,10 +137,12 @@ class TotalUsageController extends Controller
                 ->whereBetween('created_at', [$yesterday, $today])
                 ->select(
                     DB::raw('YEARWEEK(created_at) as week'),
+                    DB::raw('DATE_FORMAT(created_at, "%m") as month'),
+                    DB::raw('DATE_FORMAT(created_at, "%Y") as year'),
                     DB::raw('MAX(kwh) as kwh'),
                     DB::raw('MAX(watt) as watt')
                 )
-                ->groupBy('week')
+                ->groupBy('week', 'month', 'year')
                 ->orderBy('week', 'asc')
                 ->get();
 
@@ -137,10 +151,12 @@ class TotalUsageController extends Controller
                 ->select(
                     'device_id',
                     DB::raw('YEARWEEK(created_at) as week'),
+                    DB::raw('DATE_FORMAT(created_at, "%m") as month'),
+                    DB::raw('DATE_FORMAT(created_at, "%Y") as year'),
                     DB::raw('MAX(kwh) as kwh'),
                     DB::raw('MAX(watt) as watt')
                 )
-                ->groupBy('week', 'device_id')
+                ->groupBy('week', 'device_id', 'month', 'year')
                 ->orderBy('week', 'asc')
                 ->get();
 
@@ -166,10 +182,11 @@ class TotalUsageController extends Controller
                 ->whereBetween('created_at', [$yesterday, $today])
                 ->select(
                     DB::raw('DATE_FORMAT(created_at, "%Y-%m") as month'),
+                    DB::raw('DATE_FORMAT(created_at, "%Y") as year'),
                     DB::raw('MAX(kwh) as kwh'),
                     DB::raw('MAX(watt) as watt')
                 )
-                ->groupBy('month')
+                ->groupBy('month', 'year')
                 ->orderBy('month', 'asc')
                 ->get();
 
@@ -178,10 +195,11 @@ class TotalUsageController extends Controller
                 ->select(
                     'device_id',
                     DB::raw('DATE_FORMAT(created_at, "%Y-%m") as month'),
+                    DB::raw('DATE_FORMAT(created_at, "%Y") as year'),
                     DB::raw('MAX(kwh) as kwh'),
                     DB::raw('MAX(watt) as watt')
                 )
-                ->groupBy('month', 'device_id')
+                ->groupBy('month', 'device_id', 'year')
                 ->orderBy('month', 'asc')
                 ->get();
 
