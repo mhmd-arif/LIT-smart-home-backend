@@ -23,27 +23,33 @@ use App\Http\Controllers\Api\AuthController;
 //     return $request->user();
 // });
 
-
-// device
-Route::apiResource('devices', DeviceController::class);
-Route::patch('devices/update_state/{id}', [DeviceController::class, 'updateState']);
-Route::patch('devices/update_favorite/{id}', [DeviceController::class, 'updateFavorite']);
-
-// device usage per device
-Route::apiResource('device_usages', DeviceUsageController::class);
-Route::post('device_usages/create', [DeviceUsageController::class, 'createUsage']);
-Route::get('device_usages/get_usage/{id}', [DeviceUsageController::class, 'getUsage']);
-
-// usages total all device
-Route::get('total_usages', [TotalUsageController::class, 'getTotalUsage']);
-Route::get('total_usages/hourly/', [TotalUsageController::class, 'getTotalUsageHourly']);
-Route::get('total_usages/daily', [TotalUsageController::class, 'getTotalUsageDaily']);
-Route::get('total_usages/weekly', [TotalUsageController::class, 'getTotalUsageWeekly']);
-Route::get('total_usages/monthly', [TotalUsageController::class, 'getTotalUsageMonthly']);
-
-// user
-Route::apiResource('users', UserController::class);
-
 // auth
-Route::post('auth/login', [AuthController::class, 'login']);
 Route::post('auth/register', [AuthController::class, 'register']);
+Route::post('auth/login', [AuthController::class, 'login']);
+
+//Protecting Routes
+Route::group(['middleware' => ['auth:sanctum']], function () {
+
+    // device
+    Route::apiResource('devices', DeviceController::class);
+    Route::patch('devices/update_state/{id}', [DeviceController::class, 'updateState']);
+    Route::patch('devices/update_favorite/{id}', [DeviceController::class, 'updateFavorite']);
+
+    // device usage per device
+    Route::apiResource('device_usages', DeviceUsageController::class);
+    Route::post('device_usages/create', [DeviceUsageController::class, 'createUsage']);
+    Route::get('device_usages/get_usage/{id}', [DeviceUsageController::class, 'getUsage']);
+
+    // usages total all device
+    Route::get('total_usages', [TotalUsageController::class, 'getTotalUsage']);
+    Route::get('total_usages/hourly/', [TotalUsageController::class, 'getTotalUsageHourly']);
+    Route::get('total_usages/daily', [TotalUsageController::class, 'getTotalUsageDaily']);
+    Route::get('total_usages/weekly', [TotalUsageController::class, 'getTotalUsageWeekly']);
+    Route::get('total_usages/monthly', [TotalUsageController::class, 'getTotalUsageMonthly']);
+
+    // crud user
+    Route::apiResource('users', UserController::class);
+    Route::get('auth/currentUser', [AuthController::class, 'getCurrentUser']);
+
+    Route::post('auth/logout', [AuthController::class, 'logout']);
+});
