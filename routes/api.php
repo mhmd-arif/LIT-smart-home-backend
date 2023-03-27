@@ -30,7 +30,7 @@ Route::post('auth/login', [AuthController::class, 'login']);
 Route::group(['middleware' => ['auth:sanctum']], function () {
 
     // device
-    Route::apiResource('devices', DeviceController::class);
+    Route::apiResource('devices', DeviceController::class)->middleware('checkUserDevice');
     Route::patch('devices/update_state/{id}', [DeviceController::class, 'updateState']);
     Route::patch('devices/update_favorite/{id}', [DeviceController::class, 'updateFavorite']);
 

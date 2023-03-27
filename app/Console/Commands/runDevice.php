@@ -36,14 +36,13 @@ class runDevice extends Command
         $total_kwh = 0;
         $total_watt = 0;
 
-        foreach ($devices as $device)
-        {
-            if($device->state==1){
+        foreach ($devices as $device) {
+            if ($device->state == 1) {
                 $time_last_change = (new Carbon($device->updated_at))->toImmutable()->setTimezone('Asia/Jakarta');
 
-                $get_diff_hour = ($time_last_change->diffInSeconds(now()))/3600;
+                $get_diff_hour = ($time_last_change->diffInSeconds(now())) / 3600;
 
-                $kwh = round(($get_diff_hour * $device->watt)/1000, 5) + ($device->last_kwh);
+                $kwh = round(($get_diff_hour * $device->watt) / 1000, 5) + ($device->last_kwh);
                 $watt = $device->watt;
             } else {
                 $kwh = round($device->last_kwh, 5);
@@ -51,11 +50,13 @@ class runDevice extends Command
             }
 
             DB::table('device_usages')->insert([
-                ["device_id"=>$device->id,
-                    "kwh"=>$kwh,
-                    "watt"=>$watt,
-                    "state"=>$device->state,
-                    "created_at"=>now()
+                [
+                    "device_id" => $device->id,
+                    "user_id" => auth()->user()->id,
+                    "kwh" => $kwh,
+                    "watt" => $watt,
+                    "state" => $device->state,
+                    "created_at" => now()
                 ]
             ]);
 
@@ -66,11 +67,13 @@ class runDevice extends Command
                 "last_kwh" => $kwh,
             ]);
         }
-        
+
         DB::table('total_usages')->insert([
-            ["kwh"=>$total_kwh,
-                "watt"=>$total_watt,
-                "created_at"=>now(),
+            [
+                "user_id" => auth()->user()->id,
+                "kwh" => $total_kwh,
+                "watt" => $total_watt,
+                "created_at" => now(),
             ]
         ]);
     }   

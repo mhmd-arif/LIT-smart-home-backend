@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Auth;
 use App\Models\Device;
 use App\Models\DeviceUsage;
 use Symfony\Component\HttpKernel\Exception\HttpException;
@@ -51,6 +52,7 @@ class DeviceUsageController extends Controller
                 DB::table('device_usages')->insert([
                     [
                         "device_id" => $device->id,
+                        "user_id" => auth()->user()->id,
                         "kwh" => $kwh,
                         "watt" => $watt,
                         "state" => $device->state,
@@ -68,6 +70,7 @@ class DeviceUsageController extends Controller
 
             DB::table('total_usages')->insert([
                 [
+                    "user_id" => auth()->user()->id,
                     "kwh" => $total_kwh,
                     "watt" => $total_watt,
                     "created_at" => now(),

@@ -13,6 +13,7 @@ return new class extends Migration
     {
         Schema::create('total_usages', function (Blueprint $table) {
             $table->id();
+            $table->unsignedBigInteger('user_id');
             $table->float('watt')->nullable()->default(0);            
             $table->decimal('kwh', 9, 5)->nullable()->default(0.0000);
             $table->timestamps();
