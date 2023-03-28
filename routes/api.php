@@ -25,6 +25,7 @@ use App\Http\Controllers\Api\AuthController;
 // auth
 Route::post('auth/register', [AuthController::class, 'register']);
 Route::post('auth/login', [AuthController::class, 'login']);
+Route::post('device_usages/create', [DeviceUsageController::class, 'createUsage']);
 
 //Protecting Routes
 Route::group(['middleware' => ['auth:sanctum']], function () {
@@ -36,7 +37,6 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
 
     // device usage per device
     Route::apiResource('device_usages', DeviceUsageController::class);
-    Route::post('device_usages/create', [DeviceUsageController::class, 'createUsage']);
     Route::get('device_usages/get_usage/{id}', [DeviceUsageController::class, 'getUsage']);
 
     // usages total all device
