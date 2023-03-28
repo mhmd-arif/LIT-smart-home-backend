@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Auth;
 use App\Models\Device;
 use Symfony\Component\HttpKernel\Exception\HttpException;
 use App\Models\DeviceUsage;
@@ -18,13 +19,18 @@ class TotalUsageController extends Controller
     public function getTotalUsage()
     {
         try {
+            $currentUser = Auth::user();
+
             $today = date('Y-m-d H:i:s');
             $yesterday = date('Y-m-d', strtotime('-1 day'));
-            $total_usages = DB::table('total_usages')->whereBetween('created_at', [$yesterday, $today])->get();
+            $total_usages = DB::table('total_usages')
+            ->where('user_id', $currentUser->id)
+            ->whereBetween('created_at', [$yesterday, $today])
+            ->get();
 
             return response()->json([
                 'success' => true,
-                'message' => 'Device usages created successfully',
+                'message' => 'Device regularly created successfully',
                 'data' => $total_usages
             ], 200);
         } catch (\Exception $e) {
@@ -35,9 +41,12 @@ class TotalUsageController extends Controller
     public function getTotalUsageHourly()
     {
         try {
+            $currentUser = Auth::user();
+
             $today = date('Y-m-d H:i:s');
             $yesterday = date('Y-m-d', strtotime('-1 day'));
             $usage = DB::table('total_usages')
+                ->where('user_id', $currentUser->id)
                 ->whereBetween('created_at', [$yesterday, $today])
                 ->select(
                     DB::raw('DATE_FORMAT(created_at, "%H:00:00") as hour'),
@@ -84,9 +93,12 @@ class TotalUsageController extends Controller
     public function getTotalUsageDaily()
     {
         try {
+            $currentUser = Auth::user();
+
             $today = date('Y-m-d H:i:s');
             $yesterday = date('Y-m-d', strtotime('-7 day'));
             $usage = DB::table('total_usages')
+                ->where('user_id', $currentUser->id)
                 ->whereBetween('created_at', [$yesterday, $today])
                 ->select(
                     DB::raw('DATE(created_at) as date'),
@@ -131,9 +143,12 @@ class TotalUsageController extends Controller
     public function getTotalUsageWeekly()
     {
         try {
+            $currentUser = Auth::user();
+
             $today = date('Y-m-d H:i:s');
             $yesterday = date('Y-m-d', strtotime('-30 day'));
             $usage = DB::table('total_usages')
+                ->where('user_id', $currentUser->id)
                 ->whereBetween('created_at', [$yesterday, $today])
                 ->select(
                     DB::raw('YEARWEEK(created_at) as week'),
@@ -176,9 +191,12 @@ class TotalUsageController extends Controller
     public function getTotalUsageMonthly()
     {
         try {
+            $currentUser = Auth::user();
+
             $today = date('Y-m-d H:i:s');
             $yesterday = date('Y-m-d', strtotime('-365 day'));
             $usage = DB::table('total_usages')
+                ->where('user_id', $currentUser->id)
                 ->whereBetween('created_at', [$yesterday, $today])
                 ->select(
                     DB::raw('DATE_FORMAT(created_at, "%Y-%m") as month'),
