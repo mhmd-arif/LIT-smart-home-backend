@@ -52,7 +52,7 @@ class DeviceUsageController extends Controller
                 DB::table('device_usages')->insert([
                     [
                         "device_id" => $device->id,
-                        "user_id" => auth()->user()->id,
+                        "user_id" => $device->user_id,
                         "kwh" => $kwh,
                         "watt" => $watt,
                         "state" => $device->state,
@@ -70,7 +70,7 @@ class DeviceUsageController extends Controller
 
             DB::table('total_usages')->insert([
                 [
-                    "user_id" => auth()->user()->id,
+                    "user_id" => $device->user_id,
                     "kwh" => $total_kwh,
                     "watt" => $total_watt,
                     "created_at" => now(),

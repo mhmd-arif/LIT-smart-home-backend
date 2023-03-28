@@ -7,6 +7,7 @@ use App\Models\Device;
 use App\Models\DeviceUsage;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Auth;
 use Symfony\Component\HttpKernel\Exception\HttpException;
 use Carbon\Carbon;
 
@@ -15,7 +16,10 @@ class DeviceController extends Controller
     public function index()
     {
         try {
-            $devices = Device::orderBy('is_favorite', 'desc')->get();
+            $currentUser = Auth::user();
+            $devices = Device::where('user_id', $currentUser->id)
+            ->orderBy('is_favorite', 'desc')
+            ->get();
             return response()->json([
                 'success' => true,
                 'message' => 'Devices is fetched successfully',
@@ -53,6 +57,14 @@ class DeviceController extends Controller
     public function show(Device $device)
     {
         try {
+            $currentUser = Auth::user();
+            if ($device->user_id != $currentUser->id){
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Unauthorized - cant access this device',
+                ], 400);
+            }
+
             return response()->json([
                 'success' => true,
                 'message' => 'Your device (' . $device->device_name . ') is found',
@@ -66,9 +78,14 @@ class DeviceController extends Controller
     public function update(Device $device, Request $request)
     {
         try {
-
+            $currentUser = Auth::user();
+            if ($device->user_id != $currentUser->id){
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Unauthorized - cant access this device',
+                ], 400);
+            }
             $request->validate([
-                'user_id' => 'required|exists:users,id',
                 'device_name' => 'required',
                 'category' => 'required',
                 'volt' => 'required|numeric',
@@ -99,12 +116,19 @@ class DeviceController extends Controller
     public function updateState(Request $request, $id)
     {
         try {
+            $device = Device::find($id);
+            $currentUser = Auth::user();
+
+            if ($device->user_id != $currentUser->id){
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Unauthorized - cant access this device',
+                ], 400);
+            }
 
             $request->validate([
                 'state' => 'required',
             ]);
-    
-            $device = Device::find($id);
     
             if ($device->state == 1) {
                 $time_last_change = (new Carbon($device->updated_at))->toImmutable()->setTimezone('Asia/Jakarta');
@@ -131,6 +155,16 @@ class DeviceController extends Controller
     public function updateFavorite(Request $request, $id)
     {
         try {
+            $device = Device::find($id);
+            $currentUser = Auth::user();
+
+            if ($device->user_id != $currentUser->id){
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Unauthorized - cant access this device',
+                ], 400);
+            }
+
             $request->validate([
                 'is_favorite' => 'required',
             ]);
@@ -151,6 +185,14 @@ class DeviceController extends Controller
     public function destroy(Device $device)
     {
         try {
+            $currentUser = Auth::user();
+            if ($device->user_id != $currentUser->id){
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Unauthorized - cant access this device',
+                ], 400);
+            }
+            
             $device->delete();
             return response()->json([
                 'success' => true,
