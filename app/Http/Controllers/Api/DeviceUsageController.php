@@ -16,7 +16,9 @@ class DeviceUsageController extends Controller
     public function index()
     {
         try {
-            $device_usages = DeviceUsage::get();
+            $currentUser = Auth::user();
+            $device_usages = DeviceUsage::where('user_id', $currentUser->id)
+            ->get();
             return response()->json([
                 'success' => true,
                 'message' => 'Device usages is fetched successfully',
@@ -30,7 +32,6 @@ class DeviceUsageController extends Controller
     public function createUsage()
     {
         try {
-
             $devices = DB::table('devices')->get();
 
             $total_kwh = 0;
@@ -89,6 +90,14 @@ class DeviceUsageController extends Controller
     public function show(DeviceUsage $device_usage)
     {
         try {
+            $currentUser = Auth::user();
+            if ($device_usage->user_id != $currentUser->id){
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Unauthorized - cant access this device',
+                ], 400);
+            }
+
             return response()->json([
                 'success' => true,
                 'message' => 'Device usage is fetched successfully',
@@ -103,7 +112,17 @@ class DeviceUsageController extends Controller
     public function getUsage($id)
     {
         try {
+            $usage = Device::find($id)->deviceUsage->first();
             $usages = Device::find($id)->deviceUsage;
+            $currentUser = Auth::user();
+
+            if ($usage->user_id != $currentUser->id){
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Unauthorized - cant access this device',
+                ], 400);
+            }
+            
             return response()->json([
                 'success' => true,
                 'message' => 'Device usage by is fetched successfully',
@@ -114,9 +133,18 @@ class DeviceUsageController extends Controller
         }
     }
 
+    // not used
     public function destroy(DeviceUsage $device_usage)
     {
         try {
+            $currentUser = Auth::user();
+            if ($device_usage->user_id != $currentUser->id){
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Unauthorized - cant access this device',
+                ], 400);
+            }
+
             $device_usage->delete();
             return response()->json([
                 'success' => true,
