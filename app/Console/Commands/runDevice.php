@@ -33,13 +33,14 @@ class runDevice extends Command
     {   
         $users = DB::table('users')->get();
 
-        $total_kwh = 0;
-        $total_watt = 0;
 
         foreach ($users as $user){
             $devices = DB::table('devices')
                 ->where('user_id', $user->id)
                 ->get();
+
+            $total_kwh = 0;
+            $total_watt = 0;
 
             foreach ($devices as $device) {
                 if ($device->state == 1) {

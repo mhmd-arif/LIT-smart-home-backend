@@ -48,7 +48,7 @@ class DeviceSeeder extends Seeder
                 "volt" => "100",
                 "ampere" => "1",
                 "watt" => "120",
-                "state" => false,
+                "state" => true,
                 "icon_url" => "mdi-power-socket-eu",
                 "created_at" => now(),
                 "updated_at" => now(),
