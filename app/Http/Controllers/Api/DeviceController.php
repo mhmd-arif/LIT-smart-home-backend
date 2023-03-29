@@ -13,7 +13,7 @@ use Carbon\Carbon;
 
 class DeviceController extends Controller
 {
-    public function index()
+    public function getDevices()
     {
         try {
             $currentUser = Auth::user();
@@ -30,20 +30,34 @@ class DeviceController extends Controller
         }
     }
 
-    public function store(Request $request)
+    public function createDevice(Request $request)
     {
         try {
             $request->validate([
-                'user_id' => 'required|exists:users,id',
                 'device_name' => 'required',
+                'user_id' => 'required|exists:users,id',
                 'category' => 'required',
                 'volt' => 'required',
                 'ampere' => 'required',
                 'watt' => 'required',
                 'icon_url' => 'required'
             ]);
+            
+            DB::table('devices')->insert([
+                [
+                    'device_name' => $request->device_name,
+                    'user_id' => $request->user_id,
+                    'category' => $request->category,
+                    'volt' => $request->volt,
+                    'ampere' => $request->ampere,
+                    'watt' => $request->watt,
+                    'icon_url' => $request->icon_url,
+                    "created_at" => now(),
+                ]
+            ]);
 
-            $device = Device::create($request->all());
+            $device = DB::table('devices')->get()->last();
+            
             return response()->json([
                 'success' => true,
                 'message' => 'Device is created successfully',
@@ -54,11 +68,14 @@ class DeviceController extends Controller
         }
     }
 
-    public function show(Device $device)
+    public function findDevice($id)
     {
         try {
             $currentUser = Auth::user();
-            if ($device->user_id != $currentUser->id){
+            $device = Device::find($id);
+            $checkedDevice = $device !== null ? $device->user_id : false;
+
+            if ($checkedDevice != $currentUser->id){
                 return response()->json([
                     'success' => false,
                     'message' => 'Unauthorized - cant access this device',
@@ -75,11 +92,14 @@ class DeviceController extends Controller
         }
     }
 
-    public function update(Device $device, Request $request)
+    public function updateDevice($id, Request $request)
     {
         try {
             $currentUser = Auth::user();
-            if ($device->user_id != $currentUser->id){
+            $device = Device::find($id);
+            $checkedDevice = $device !== null ? $device->user_id : false;
+
+            if ($checkedDevice != $currentUser->id){
                 return response()->json([
                     'success' => false,
                     'message' => 'Unauthorized - cant access this device',
@@ -116,10 +136,11 @@ class DeviceController extends Controller
     public function updateState(Request $request, $id)
     {
         try {
-            $device = Device::find($id);
             $currentUser = Auth::user();
+            $device = Device::find($id);
+            $checkedDevice = $device !== null ? $device->user_id : false;
 
-            if ($device->user_id != $currentUser->id){
+            if ($checkedDevice != $currentUser->id){
                 return response()->json([
                     'success' => false,
                     'message' => 'Unauthorized - cant access this device',
@@ -155,10 +176,11 @@ class DeviceController extends Controller
     public function updateFavorite(Request $request, $id)
     {
         try {
-            $device = Device::find($id);
             $currentUser = Auth::user();
+            $device = Device::find($id);
+            $checkedDevice = $device !== null ? $device->user_id : false;
 
-            if ($device->user_id != $currentUser->id){
+            if ($checkedDevice != $currentUser->id){
                 return response()->json([
                     'success' => false,
                     'message' => 'Unauthorized - cant access this device',
@@ -182,11 +204,14 @@ class DeviceController extends Controller
         
     }
 
-    public function destroy(Device $device)
+    public function deleteDevices($id)
     {
         try {
             $currentUser = Auth::user();
-            if ($device->user_id != $currentUser->id){
+            $device = Device::find($id);
+            $checkedDevice = $device !== null ? $device->user_id : false;
+
+            if ($checkedDevice != $currentUser->id){
                 return response()->json([
                     'success' => false,
                     'message' => 'Unauthorized - cant access this device',

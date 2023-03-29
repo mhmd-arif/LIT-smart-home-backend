@@ -31,13 +31,20 @@ Route::post('device_usages/create', [DeviceUsageController::class, 'createUsage'
 Route::group(['middleware' => ['auth:sanctum']], function () {
 
     // device
-    Route::apiResource('devices', DeviceController::class);
+    // Route::apiResource('devices', DeviceController::class); 
+    Route::post('devices/create', [DeviceController::class, 'createDevice']);
+    Route::get('devices', [DeviceController::class, 'getDevices']);
+    Route::get('devices/{id}', [DeviceController::class, 'findDevice']);
+    Route::put('devices/update_device/{id}', [DeviceController::class, 'updateDevice']);
     Route::patch('devices/update_state/{id}', [DeviceController::class, 'updateState']);
     Route::patch('devices/update_favorite/{id}', [DeviceController::class, 'updateFavorite']);
+    Route::delete('devices/delete/{id}', [DeviceController::class, 'deleteDevices']);
 
     // device usage per device
     Route::apiResource('device_usages', DeviceUsageController::class);
-    Route::get('device_usages/get_usage/{id}', [DeviceUsageController::class, 'getUsage']);
+    // Route::post('device_usages/get_usage/{id}', [DeviceUsageController::class, 'createUsage']);
+    Route::get('device_usages/get_usage/{id}', [DeviceUsageController::class, 'findUsage']);
+    // Route::delete('devices/delete/{id}', [DeviceController::class, 'deleteDevices']);
 
     // usages total all device
     Route::get('total_usages', [TotalUsageController::class, 'getTotalUsage']);

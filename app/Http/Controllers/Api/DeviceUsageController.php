@@ -116,14 +116,14 @@ class DeviceUsageController extends Controller
     }
 
     // get usage (watt and kwh) PER DEVICE with the timeline
-    public function getUsage($id)
+    public function findUsage($id)
     {
         try {
-            $usage = Device::find($id)->deviceUsage->first();
-            $usages = Device::find($id)->deviceUsage;
+            $device = Device::find($id);
+            $checkedDevice = $device !== null ? $device->deviceUsage->first()->user_id : false;
             $currentUser = Auth::user();
 
-            if (($usage !== null ? $usage->user_id : false) != $currentUser->id){
+            if (($checkedDevice) != ($currentUser->id)){
                 return response()->json([
                     'success' => false,
                     'message' => 'Unauthorized - cant access this device',
@@ -133,7 +133,7 @@ class DeviceUsageController extends Controller
             return response()->json([
                 'success' => true,
                 'message' => 'Device usage by is fetched successfully',
-                'data' => $usages
+                'data' => $device->deviceUsage
             ], 200);
         } catch (\Exception $e) {
             throw new HttpException(500, $e->getMessage());
