@@ -46,7 +46,7 @@ class User extends Authenticatable
         'email_verified_at' => 'datetime',
     ];
 
-    // public function device(): HasMany
+    // public function userDevice(): HasMany
     // {
     //     return $this->hasMany(Device::class);
     // }

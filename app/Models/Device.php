@@ -4,10 +4,12 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use App\Models\User;
-use App\Models\DeviceUsage;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\belongsTo;
+use App\Models\User;
+use App\Models\DeviceUsage;
+use App\Models\UserDevice;
+
 
 class Device extends Model
 {
@@ -24,5 +26,10 @@ class Device extends Model
     // {
     //     return $this->hasMany(DeviceUsage::class);
     // }
+
+    public function userDevice(): HasMany
+    {
+        return $this->hasMany(UserDevice::class);
+    }
 
 }

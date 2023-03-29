@@ -43,26 +43,26 @@ class DeviceUsageController extends Controller
                 $total_kwh = 0;
                 $total_watt = 0;
 
-                foreach ($userDevices as $udevice) {
-                    if ($udevice->state == 1) {
-                        $time_last_change = (new Carbon($udevice->updated_at))->toImmutable()->setTimezone('Asia/Jakarta');
+                foreach ($userDevices as $uDevice) {
+                    if ($uDevice->state == 1) {
+                        $time_last_change = (new Carbon($uDevice->updated_at))->toImmutable()->setTimezone('Asia/Jakarta');
     
                         $get_diff_hour = ($time_last_change->diffInSeconds(now())) / 3600;
     
-                        $kwh = round(($get_diff_hour * $udevice->watt) / 1000, 5) + ($udevice->last_kwh);
-                        $watt = $udevice->watt;
+                        $kwh = round(($get_diff_hour * $uDevice->device()->watt) / 1000, 5) + ($uDevice->last_kwh);
+                        $watt = $uDevice->watt;
                     } else {
-                        $kwh = round($udevice->last_kwh, 5);
+                        $kwh = round($uDevice->last_kwh, 5);
                         $watt = 0;
                     }
     
                     DB::table('device_usages')->insert([
                         [
-                            "user_device_id" => $udevice->id,
-                            "user_id" => $udevice->user_id,
+                            "user_device_id" => $uDevice->id,
+                            "user_id" => $uDevice->user_id,
                             "kwh" => $kwh,
                             "watt" => $watt,
-                            "state" => $udevice->state,
+                            "state" => $uDevice->state,
                             "created_at" => now()
                         ]
                     ]);
@@ -70,14 +70,14 @@ class DeviceUsageController extends Controller
                     $total_kwh = round($total_kwh + $kwh, 5);
                     $total_watt += $watt;
     
-                    Device::where("id", $udevice->id)->update([
+                    UserDevice::where("id", $uDevice->id)->update([
                         "last_kwh" => $kwh,
                     ]);
                 }
     
                 DB::table('total_usages')->insert([
                     [
-                        "user_id" => $udevice->user_id,
+                        "user_id" => $uDevice->user_id,
                         "kwh" => $total_kwh,
                         "watt" => $total_watt,
                         "created_at" => now(),
