@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
 use App\Models\Device;
+use App\Models\UserDevice;
 use App\Models\DeviceUsage;
 use Symfony\Component\HttpKernel\Exception\HttpException;
 use Carbon\Carbon;
@@ -18,8 +19,7 @@ class DeviceUsageController extends Controller
         try {
             $currentUser = Auth::user();
             $device_usages = DB::table('device_usages')->where('user_id', $currentUser->id)->get();
-            // $device_usages = DeviceUsage::where('user_id', $currentUser->id)
-            // ->get();
+            
             return response()->json([
                 'success' => true,
                 'message' => 'Device usages is fetched successfully',
@@ -36,33 +36,33 @@ class DeviceUsageController extends Controller
             $users = DB::table('users')->get();
 
             foreach ($users as $user){
-                $devices = DB::table('devices')
+                $userDevices = DB::table('user_devices')
                     ->where('user_id', $user->id)
                     ->get();
 
                 $total_kwh = 0;
                 $total_watt = 0;
 
-                foreach ($devices as $device) {
-                    if ($device->state == 1) {
-                        $time_last_change = (new Carbon($device->updated_at))->toImmutable()->setTimezone('Asia/Jakarta');
+                foreach ($userDevices as $udevice) {
+                    if ($udevice->state == 1) {
+                        $time_last_change = (new Carbon($udevice->updated_at))->toImmutable()->setTimezone('Asia/Jakarta');
     
                         $get_diff_hour = ($time_last_change->diffInSeconds(now())) / 3600;
     
-                        $kwh = round(($get_diff_hour * $device->watt) / 1000, 5) + ($device->last_kwh);
-                        $watt = $device->watt;
+                        $kwh = round(($get_diff_hour * $udevice->watt) / 1000, 5) + ($udevice->last_kwh);
+                        $watt = $udevice->watt;
                     } else {
-                        $kwh = round($device->last_kwh, 5);
+                        $kwh = round($udevice->last_kwh, 5);
                         $watt = 0;
                     }
     
                     DB::table('device_usages')->insert([
                         [
-                            "device_id" => $device->id,
-                            "user_id" => $device->user_id,
+                            "user_device_id" => $udevice->id,
+                            "user_id" => $udevice->user_id,
                             "kwh" => $kwh,
                             "watt" => $watt,
-                            "state" => $device->state,
+                            "state" => $udevice->state,
                             "created_at" => now()
                         ]
                     ]);
@@ -70,14 +70,14 @@ class DeviceUsageController extends Controller
                     $total_kwh = round($total_kwh + $kwh, 5);
                     $total_watt += $watt;
     
-                    Device::where("id", $device->id)->update([
+                    Device::where("id", $udevice->id)->update([
                         "last_kwh" => $kwh,
                     ]);
                 }
     
                 DB::table('total_usages')->insert([
                     [
-                        "user_id" => $device->user_id,
+                        "user_id" => $udevice->user_id,
                         "kwh" => $total_kwh,
                         "watt" => $total_watt,
                         "created_at" => now(),
@@ -99,8 +99,8 @@ class DeviceUsageController extends Controller
     {
         try {
             $currentUser = Auth::user();
-            $device = Device::find($id);
-            $checkedDevice = ($device !== null) ? $device->user_id : false;
+            $userDevice = UserDevice::find($id);
+            $checkedDevice = ($userDevice !== null) ? $userDevice->user_id : false;
 
             if (($checkedDevice) != ($currentUser->id)){
                 return response()->json([
@@ -112,7 +112,7 @@ class DeviceUsageController extends Controller
             return response()->json([
                 'success' => true,
                 'message' => 'Device usage by is fetched successfully',
-                'data' => $device->deviceUsage
+                'data' => $userDevice->deviceUsage
             ], 200);
         } catch (\Exception $e) {
             throw new HttpException(500, $e->getMessage());

@@ -15,14 +15,14 @@ class Device extends Model
 
     public $guarded = [];
 
-    public function user(): BelongsTo
-    {
-        return $this->belongsTo(User::class);
-    }
+    // public function user(): BelongsTo
+    // {
+    //     return $this->belongsTo(User::class);
+    // }
 
-    public function deviceUsage(): HasMany
-    {
-        return $this->hasMany(DeviceUsage::class);
-    }
+    // public function deviceUsage(): HasMany
+    // {
+    //     return $this->hasMany(DeviceUsage::class);
+    // }
 
 }

@@ -49,7 +49,7 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
     Route::delete('devices/delete/{id}', [UserDeviceController::class, 'deleteUserDevices']);
 
     // device usage per device
-    Route::post('device_usages/create', [DeviceUsageController::class, 'createUsage']);
+    // Route::post('device_usages/create', [DeviceUsageController::class, 'createUsage']);
     Route::get('device_usages', [DeviceUsageController::class, 'getUsages']);
     Route::get('device_usages/get_usage/{id}', [DeviceUsageController::class, 'findUsage']);
 
