@@ -66,9 +66,16 @@ class DeviceController extends Controller
         try {
             $device = Device::find($id);
 
+            if($device === null){
+                return response()->json([
+                    "success" => false,
+                    'message' => 'Bad request - device not found',
+                ], 400);
+            }
+
             return response()->json([
                 'success' => true,
-                'message' => 'Your device is found',
+                'message' => 'Device ( ' . $device->category . ' ) is found',
                 'data' => $device
             ], 200);
         } catch (\Exception $e) {
@@ -80,6 +87,13 @@ class DeviceController extends Controller
     {
         try {
             $device = Device::find($id);
+
+            if($device === null){
+                return response()->json([
+                    "success" => false,
+                    'message' => 'Bad request - device not found',
+                ], 400);
+            }
             
             $request->validate([
                 'category' => 'required',
@@ -98,7 +112,7 @@ class DeviceController extends Controller
 
             return response()->json([
                 'success' => true,
-                'message' => 'Your device is updated succesfully',
+                'message' => 'Device ( ' . $device->category . ' ) is updated succesfully',
                 'data' => $device
             ], 200);
 
@@ -111,11 +125,18 @@ class DeviceController extends Controller
     {
         try {
             $device = Device::find($id);
+
+            if($device === null){
+                return response()->json([
+                    "success" => false,
+                    'message' => 'Bad request - device not found',
+                ], 400);
+            }
             
             $device->delete();
             return response()->json([
                 'success' => true,
-                'message' => 'Your device is deleted successfully',
+                'message' => 'Device ( ' . $device->category . ' ) is deleted successfully',
                 'data' => $device
             ], 200);
         } catch (\Exception $e) {
