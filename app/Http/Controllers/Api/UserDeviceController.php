@@ -14,45 +14,20 @@ use Carbon\Carbon;
 
 class UserDeviceController extends Controller
 {
-    public function getUserDevices()
-    {
-        try {
-            $currentUser = Auth::user();
-            $devices = UserDevice::where('user_id', $currentUser->id)
-            ->orderBy('is_favorite', 'desc')
-            ->get();
-            return response()->json([
-                'success' => true,
-                'message' => 'Devices is fetched successfully',
-                'data' => $devices
-            ], 200);
-        } catch (\Exception $e) {
-            throw new HttpException(500, $e->getMessage());
-        }
-    }
-
     public function createUserDevice(Request $request)
     {
         try {
+            $currentUser = Auth::user();
             $request->validate([
                 'device_name' => 'required',
-                'user_id' => 'required|exists:users,id',
-                'category' => 'required',
-                'volt' => 'required',
-                'ampere' => 'required',
-                'watt' => 'required',
-                'icon_url' => 'required'
+                'device_id' => 'required|exists:devices,id',
             ]);
             
             DB::table('user_devices')->insert([
                 [
                     'device_name' => $request->device_name,
-                    'user_id' => $request->user_id,
-                    'category' => $request->category,
-                    'volt' => $request->volt,
-                    'ampere' => $request->ampere,
-                    'watt' => $request->watt,
-                    'icon_url' => $request->icon_url,
+                    'user_id' => $currentUser->id,
+                    'device_id' => $request->device_id,
                     "created_at" => now(),
                 ]
             ]);
@@ -63,6 +38,25 @@ class UserDeviceController extends Controller
                 'success' => true,
                 'message' => 'UserDevice is created successfully',
                 'data' => $device
+            ], 200);
+        } catch (\Exception $e) {
+            throw new HttpException(500, $e->getMessage());
+        }
+    }
+    
+    public function getUserDevices()
+    {
+        try {
+            $currentUser = Auth::user();
+
+            $devices = UserDevice::where('user_id', $currentUser->id)
+            ->orderBy('is_favorite', 'desc')
+            ->get();
+            
+            return response()->json([
+                'success' => true,
+                'message' => 'Devices is fetched successfully',
+                'data' => $devices
             ], 200);
         } catch (\Exception $e) {
             throw new HttpException(500, $e->getMessage());
@@ -108,19 +102,9 @@ class UserDeviceController extends Controller
             }
             $request->validate([
                 'device_name' => 'required',
-                'category' => 'required',
-                'volt' => 'required|numeric',
-                'ampere' => 'required|numeric',
-                'watt' => 'required|numeric',
-                'icon_url' => 'required'
             ]);
 
             $device->device_name = $request->device_name;
-            $device->category = $request->category;
-            $device->volt = $request->volt;
-            $device->ampere = $request->ampere;
-            $device->watt = $request->watt;
-            $device->icon_url = $request->icon_url;
             $device->save();
 
             return response()->json([
