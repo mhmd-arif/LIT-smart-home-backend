@@ -87,7 +87,7 @@ class AuthController extends Controller
     public function getCurrentUser(Request $request)
     {
         try {
-            $user = auth()->user();
+            $user = Auth::user();
             return response()->json([
                 'success' => true,
                 'message' => 'get current user (' . $user->name . ') successfully',
@@ -106,7 +106,7 @@ class AuthController extends Controller
                 'email' => 'required',
             ]);
     
-            $user = auth()->user();
+            $user = Auth::user();
     
             $user->name = $request->name;
             $user->email = $request->email;

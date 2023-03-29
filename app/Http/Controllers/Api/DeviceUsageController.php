@@ -123,7 +123,7 @@ class DeviceUsageController extends Controller
             $usages = Device::find($id)->deviceUsage;
             $currentUser = Auth::user();
 
-            if ($usage->user_id != $currentUser->id){
+            if (($usage !== null ? $usage->user_id : false) != $currentUser->id){
                 return response()->json([
                     'success' => false,
                     'message' => 'Unauthorized - cant access this device',
