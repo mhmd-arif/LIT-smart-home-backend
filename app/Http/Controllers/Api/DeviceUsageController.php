@@ -13,12 +13,13 @@ use Carbon\Carbon;
 
 class DeviceUsageController extends Controller
 {
-    public function index()
+    public function getUsages()
     {
         try {
             $currentUser = Auth::user();
-            $device_usages = DeviceUsage::where('user_id', $currentUser->id)
-            ->get();
+            $device_usages = DB::table('device_usages')->where('user_id', $currentUser->id)->get();
+            // $device_usages = DeviceUsage::where('user_id', $currentUser->id)
+            // ->get();
             return response()->json([
                 'success' => true,
                 'message' => 'Device usages is fetched successfully',
@@ -93,35 +94,13 @@ class DeviceUsageController extends Controller
         }
     }
 
-    // not used
-    public function show(DeviceUsage $device_usage)
-    {
-        try {
-            $currentUser = Auth::user();
-            if ($device_usage->user_id != $currentUser->id){
-                return response()->json([
-                    'success' => false,
-                    'message' => 'Unauthorized - cant access this device',
-                ], 400);
-            }
-
-            return response()->json([
-                'success' => true,
-                'message' => 'Device usage is fetched successfully',
-                'data' => $device_usage
-            ], 200);
-        } catch (\Exception $e) {
-            throw new HttpException(500, $e->getMessage());
-        }
-    }
-
     // get usage (watt and kwh) PER DEVICE with the timeline
     public function findUsage($id)
     {
         try {
-            $device = Device::find($id);
-            $checkedDevice = $device !== null ? $device->deviceUsage->first()->user_id : false;
             $currentUser = Auth::user();
+            $device = Device::find($id);
+            $checkedDevice = ($device !== null) ? $device->user_id : false;
 
             if (($checkedDevice) != ($currentUser->id)){
                 return response()->json([
@@ -140,25 +119,27 @@ class DeviceUsageController extends Controller
         }
     }
 
-    // not used
-    public function destroy(DeviceUsage $device_usage)
-    {
-        try {
-            $currentUser = Auth::user();
-            if ($device_usage->user_id != $currentUser->id){
-                return response()->json([
-                    'success' => false,
-                    'message' => 'Unauthorized - cant access this device',
-                ], 400);
-            }
+    // // not used
+    // public function destroy(DeviceUsage $device_usage)
+    // {
+    //     try {
+    //         $currentUser = Auth::user();
+    //         $checkedDevice = ($device !== null) ? $device->user_id : false;
 
-            $device_usage->delete();
-            return response()->json([
-                'success' => true,
-                'message' => 'Device usage is deleted successfully'
-            ], 200);
-        } catch (\Exception $e) {
-            throw new HttpException(500, $e->getMessage());
-        }
-    }
+    //         if (($checkedDevice) != ($currentUser->id)){
+    //             return response()->json([
+    //                 'success' => false,
+    //                 'message' => 'Unauthorized - cant access this device',
+    //             ], 400);
+    //         }
+
+    //         $device_usage->delete();
+    //         return response()->json([
+    //             'success' => true,
+    //             'message' => 'Device usage is deleted successfully'
+    //         ], 200);
+    //     } catch (\Exception $e) {
+    //         throw new HttpException(500, $e->getMessage());
+    //     }
+    // }
 }

@@ -41,10 +41,9 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
     Route::delete('devices/delete/{id}', [DeviceController::class, 'deleteDevices']);
 
     // device usage per device
-    Route::apiResource('device_usages', DeviceUsageController::class);
-    // Route::post('device_usages/get_usage/{id}', [DeviceUsageController::class, 'createUsage']);
+    Route::post('device_usages/create', [DeviceUsageController::class, 'createUsage']);
+    Route::get('device_usages', [DeviceUsageController::class, 'getUsages']);
     Route::get('device_usages/get_usage/{id}', [DeviceUsageController::class, 'findUsage']);
-    // Route::delete('devices/delete/{id}', [DeviceController::class, 'deleteDevices']);
 
     // usages total all device
     Route::get('total_usages', [TotalUsageController::class, 'getTotalUsage']);
