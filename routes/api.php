@@ -6,6 +6,7 @@ use App\Http\Controllers\Api\DeviceController;
 use App\Http\Controllers\Api\DeviceUsageController;
 use App\Http\Controllers\Api\TotalUsageController;
 use App\Http\Controllers\Api\AuthController;
+use App\Http\Controllers\Api\UserDeviceController;
 
 /*
 |--------------------------------------------------------------------------
@@ -31,14 +32,21 @@ Route::post('device_usages/create', [DeviceUsageController::class, 'createUsage'
 Route::group(['middleware' => ['auth:sanctum']], function () {
 
     // device
-    // Route::apiResource('devices', DeviceController::class); 
-    Route::post('devices/create', [DeviceController::class, 'createDevice']);
-    Route::get('devices', [DeviceController::class, 'getDevices']);
-    Route::get('devices/{id}', [DeviceController::class, 'findDevice']);
-    Route::put('devices/update_device/{id}', [DeviceController::class, 'updateDevice']);
-    Route::patch('devices/update_state/{id}', [DeviceController::class, 'updateState']);
-    Route::patch('devices/update_favorite/{id}', [DeviceController::class, 'updateFavorite']);
-    Route::delete('devices/delete/{id}', [DeviceController::class, 'deleteDevices']);
+    // Route::post('devices/create', [DeviceController::class, 'createDevice']);
+    // Route::get('devices', [DeviceController::class, 'getDevices']);
+    // Route::get('devices/{id}', [DeviceController::class, 'findDevice']);
+    // Route::put('devices/update_device/{id}', [DeviceController::class, 'updateDevice']);
+    // Route::patch('devices/update_state/{id}', [DeviceController::class, 'updateState']);
+    // Route::patch('devices/update_favorite/{id}', [DeviceController::class, 'updateFavorite']);
+    // Route::delete('devices/delete/{id}', [DeviceController::class, 'deleteDevices']);
+
+    Route::post('devices/create', [UserDeviceController::class, 'createUserDevice']);
+    Route::get('devices', [UserDeviceController::class, 'getUserDevices']);
+    Route::get('devices/{id}', [UserDeviceController::class, 'findUserDevice']);
+    Route::put('devices/update_device/{id}', [UserDeviceController::class, 'updateUserDevice']);
+    Route::patch('devices/update_state/{id}', [UserDeviceController::class, 'updateState']);
+    Route::patch('devices/update_favorite/{id}', [UserDeviceController::class, 'updateFavorite']);
+    Route::delete('devices/delete/{id}', [UserDeviceController::class, 'deleteUserDevices']);
 
     // device usage per device
     Route::post('device_usages/create', [DeviceUsageController::class, 'createUsage']);

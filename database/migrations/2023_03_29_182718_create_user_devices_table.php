@@ -13,6 +13,16 @@ return new class extends Migration
     {
         Schema::create('user_devices', function (Blueprint $table) {
             $table->id();
+            $table->unsignedBigInteger('user_id');
+            $table->string('device_name', 100)->default('device_name');
+            $table->string('category', 100)->nullable()->default('category');
+            $table->boolean('is_favorite')->nullable()->default(false);
+            $table->float('volt')->nullable()->default(0);
+            $table->float('ampere')->nullable()->default(0);
+            $table->float('watt')->nullable()->default(0);
+            $table->boolean('state')->nullable()->default(false);
+            $table->decimal('last_kwh', 9, 5)->nullable()->default(0.0000);
+            $table->string('icon_url', 100)->nullable()->default('mdi-devices');
             $table->timestamps();
         });
     }
