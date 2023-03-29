@@ -26,17 +26,19 @@ use App\Http\Controllers\Api\UserDeviceController;
 // auth
 Route::post('auth/register', [AuthController::class, 'register']);
 Route::post('auth/login', [AuthController::class, 'login']);
+
+// device usage automation
 Route::post('device_usages/create', [DeviceUsageController::class, 'createUsage']);
+
+// device
+Route::post('devices/create', [DeviceController::class, 'createDevice']);
+Route::get('devices', [DeviceController::class, 'getDevices']);
+Route::get('devices/{id}', [DeviceController::class, 'findDevice']);
+Route::put('devices/update_device/{id}', [DeviceController::class, 'updateDevice']);
+Route::delete('devices/delete/{id}', [DeviceController::class, 'deleteDevices']);
 
 //Protecting Routes
 Route::group(['middleware' => ['auth:sanctum']], function () {
-
-    // device
-    Route::post('devices/create', [DeviceController::class, 'createDevice']);
-    Route::get('devices', [DeviceController::class, 'getDevices']);
-    Route::get('devices/{id}', [DeviceController::class, 'findDevice']);
-    Route::put('devices/update_device/{id}', [DeviceController::class, 'updateDevice']);
-    Route::delete('devices/delete/{id}', [DeviceController::class, 'deleteDevices']);
 
     // User device
     Route::post('user_devices/create', [UserDeviceController::class, 'createUserDevice']);
@@ -48,7 +50,6 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
     Route::delete('user_devices/delete/{id}', [UserDeviceController::class, 'deleteUserDevices']);
 
     // device usage per device
-    // Route::post('device_usages/create', [DeviceUsageController::class, 'createUsage']);
     Route::get('device_usages', [DeviceUsageController::class, 'getUsages']);
     Route::get('device_usages/get_usage/{id}', [DeviceUsageController::class, 'findUsage']);
 
@@ -63,5 +64,6 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
     Route::get('auth/current_user', [AuthController::class, 'getCurrentUser']);
     Route::put('auth/update_user', [AuthController::class, 'updateUser']);
 
+    // logout
     Route::post('auth/logout', [AuthController::class, 'logout']);
 });
