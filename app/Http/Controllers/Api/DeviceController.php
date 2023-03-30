@@ -16,13 +16,21 @@ class DeviceController extends Controller
     public function createDevice(Request $request)
     {
         try {
-            $request->validate([
+
+            $validator = Validator::make($request->all(),[
                 'category' => 'required',
                 'volt' => 'required',
                 'ampere' => 'required',
                 'watt' => 'required',
                 'icon_url' => 'required'
             ]);
+
+            if($validator->fails()){
+                return response()->json([
+                    "success" => false,
+                    "message" => $validator->errors(),
+                ], 400);       
+            }
             
             DB::table('devices')->insert([
                 [
@@ -94,14 +102,21 @@ class DeviceController extends Controller
                     'message' => 'Bad request - device not found',
                 ], 400);
             }
-            
-            $request->validate([
+
+            $validator = Validator::make($request->all(),[
                 'category' => 'required',
                 'volt' => 'required|numeric',
                 'ampere' => 'required|numeric',
                 'watt' => 'required|numeric',
                 'icon_url' => 'required'
             ]);
+
+            if($validator->fails()){
+                return response()->json([
+                    "success" => false,
+                    "message" => $validator->errors(),
+                ], 400);       
+            }
 
             $device->category = $request->category;
             $device->volt = $request->volt;

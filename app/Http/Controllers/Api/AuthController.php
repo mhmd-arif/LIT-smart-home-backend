@@ -51,8 +51,15 @@ class AuthController extends Controller
             if (!Auth::attempt($request->only('email', 'password')))
             {
                 return response()
-                    ->json(['message' => 'Unauthorized'], 401);
+                    ->json([
+                        'success' => false,
+                        'message' => 'Incorrect email or password'
+                    ], 401);
             }
+
+            return response()->json([
+                                
+            ], 200);
 
             $user = User::where('email', $request['email'])->firstOrFail();
 
@@ -101,10 +108,17 @@ class AuthController extends Controller
     public function updateUser(Request $request)
     {
         try {
-            $request -> validate([
+            $validator = Validator::make($request->all(),[
                 'name' => 'required',
                 'email' => 'required',
             ]);
+
+            if($validator->fails()){
+                return response()->json([
+                    "success" => false,
+                    "message" => $validator->errors(),
+                ], 400);       
+            }
     
             $user = Auth::user();
     

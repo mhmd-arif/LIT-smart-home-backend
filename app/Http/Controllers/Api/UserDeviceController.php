@@ -9,6 +9,7 @@ use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Validator;
 use Symfony\Component\HttpKernel\Exception\HttpException;
 use Carbon\Carbon;
 
@@ -17,11 +18,17 @@ class UserDeviceController extends Controller
     public function createUserDevice(Request $request)
     {
         try {
-            $currentUser = Auth::user();
-            $request->validate([
+            $validator = Validator::make($request->all(),[
                 'device_name' => 'required',
                 'device_id' => 'required|exists:devices,id',
             ]);
+
+            if($validator->fails()){
+                return response()->json([
+                    "success" => false,
+                    "message" => $validator->errors(),
+                ], 400);       
+            }
             
             DB::table('user_devices')->insert([
                 [
@@ -75,7 +82,7 @@ class UserDeviceController extends Controller
                 return response()->json([
                     'success' => false,
                     'message' => 'Unauthorized - cant access this device',
-                ], 400);
+                ], 401);
             }
 
             return response()->json([
@@ -99,11 +106,19 @@ class UserDeviceController extends Controller
                 return response()->json([
                     'success' => false,
                     'message' => 'Unauthorized - cant access this device',
-                ], 400);
+                ], 401);
             }
-            $request->validate([
+
+            $validator = Validator::make($request->all(),[
                 'device_name' => 'required',
             ]);
+
+            if($validator->fails()){
+                return response()->json([
+                    "success" => false,
+                    "message" => $validator->errors(),
+                ], 400);       
+            }
 
             $device->device_name = $request->device_name;
             $device->save();
@@ -130,12 +145,19 @@ class UserDeviceController extends Controller
                 return response()->json([
                     'success' => false,
                     'message' => 'Unauthorized - cant access this device',
-                ], 400);
+                ], 401);
             }
 
-            $request->validate([
+            $validator = Validator::make($request->all(),[
                 'state' => 'required',
             ]);
+
+            if($validator->fails()){
+                return response()->json([
+                    "success" => false,
+                    "message" => $validator->errors(),
+                ], 400);       
+            }
     
             if ($device->state == 1) {
                 $time_last_change = (new Carbon($device->updated_at))->toImmutable()->setTimezone('Asia/Jakarta');
@@ -170,12 +192,19 @@ class UserDeviceController extends Controller
                 return response()->json([
                     'success' => false,
                     'message' => 'Unauthorized - cant access this device',
-                ], 400);
+                ], 401);
             }
-
-            $request->validate([
+            
+            $validator = Validator::make($request->all(),[
                 'is_favorite' => 'required',
             ]);
+
+            if($validator->fails()){
+                return response()->json([
+                    "success" => false,
+                    "message" => $validator->errors(),
+                ], 400);       
+            }
     
             $device = UserDevice::where("id", $id)->update([
                 "is_favorite" => $request->is_favorite,
@@ -201,7 +230,7 @@ class UserDeviceController extends Controller
                 return response()->json([
                     'success' => false,
                     'message' => 'Unauthorized - cant access this device',
-                ], 400);
+                ], 401);
             }
             
             $device->delete();

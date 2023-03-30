@@ -109,8 +109,8 @@ class DeviceUsageController extends Controller
             if (($checkedDevice) != ($currentUser->id)){
                 return response()->json([
                     'success' => false,
-                    'message' => 'Unauthorized - cant access this device',
-                ], 400);
+                    'message' => 'cant access this device',
+                ], 401);
             }
             
             return response()->json([
