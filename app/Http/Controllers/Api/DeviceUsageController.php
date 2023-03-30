@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
 use App\Models\Device;
+use App\Models\User;
 use App\Models\UserDevice;
 use App\Models\DeviceUsage;
 use Symfony\Component\HttpKernel\Exception\HttpException;
@@ -44,13 +45,16 @@ class DeviceUsageController extends Controller
                 $total_watt = 0;
 
                 foreach ($userDevices as $uDevice) {
+
+                    $deviceWatt = UserDevice::find($uDevice->id)->device->watt;
+
                     if ($uDevice->state == 1) {
                         $time_last_change = (new Carbon($uDevice->updated_at))->toImmutable()->setTimezone('Asia/Jakarta');
     
                         $get_diff_hour = ($time_last_change->diffInSeconds(now())) / 3600;
     
-                        $kwh = round(($get_diff_hour * $uDevice->device()->watt) / 1000, 5) + ($uDevice->last_kwh);
-                        $watt = $uDevice->watt;
+                        $kwh = round(($get_diff_hour * $deviceWatt) / 1000, 5) + ($uDevice->last_kwh);
+                        $watt = $deviceWatt;
                     } else {
                         $kwh = round($uDevice->last_kwh, 5);
                         $watt = 0;
