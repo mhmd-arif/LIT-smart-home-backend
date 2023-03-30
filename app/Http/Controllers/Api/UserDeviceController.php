@@ -29,6 +29,7 @@ class UserDeviceController extends Controller
                     'user_id' => $currentUser->id,
                     'device_id' => $request->device_id,
                     "created_at" => now(),
+                    "updated_at" => now(),
                 ]
             ]);
 
