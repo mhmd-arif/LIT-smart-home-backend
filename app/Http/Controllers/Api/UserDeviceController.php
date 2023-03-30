@@ -19,7 +19,7 @@ class UserDeviceController extends Controller
     {
         try {
             $validator = Validator::make($request->all(),[
-                'device_name' => 'required',
+                'device_name' => 'required|string|max:100',
                 'device_id' => 'required|exists:devices,id',
             ]);
 
@@ -110,7 +110,7 @@ class UserDeviceController extends Controller
             }
 
             $validator = Validator::make($request->all(),[
-                'device_name' => 'required',
+                'device_name' => 'required|string|max:100',
             ]);
 
             if($validator->fails()){
@@ -149,7 +149,7 @@ class UserDeviceController extends Controller
             }
 
             $validator = Validator::make($request->all(),[
-                'state' => 'required',
+                'state' => 'required|boolean',
             ]);
 
             if($validator->fails()){
@@ -194,9 +194,9 @@ class UserDeviceController extends Controller
                     'message' => 'Unauthorized - cant access this device',
                 ], 401);
             }
-            
+
             $validator = Validator::make($request->all(),[
-                'is_favorite' => 'required',
+                'is_favorite' => 'required|boolean',
             ]);
 
             if($validator->fails()){

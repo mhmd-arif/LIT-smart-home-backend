@@ -18,11 +18,11 @@ class DeviceController extends Controller
         try {
 
             $validator = Validator::make($request->all(),[
-                'category' => 'required',
-                'volt' => 'required',
-                'ampere' => 'required',
-                'watt' => 'required',
-                'icon_url' => 'required'
+                'category' => 'required|string|max:50',
+                'volt' => 'required|numeric',
+                'ampere' => 'required|numeric',
+                'watt' => 'required|numeric',
+                'icon_url' => 'required|string'
             ]);
 
             if($validator->fails()){
@@ -104,11 +104,11 @@ class DeviceController extends Controller
             }
 
             $validator = Validator::make($request->all(),[
-                'category' => 'required',
+                'category' => 'required|string|max:50',
                 'volt' => 'required|numeric',
                 'ampere' => 'required|numeric',
                 'watt' => 'required|numeric',
-                'icon_url' => 'required'
+                'icon_url' => 'required|string'
             ]);
 
             if($validator->fails()){
