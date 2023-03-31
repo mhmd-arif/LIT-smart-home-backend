@@ -39,9 +39,6 @@ class AuthController extends Controller
             return response()->json([
                 'success' => true,
                 'message' => 'Register successfully',
-                'data' => $user,
-                'access_token' => $token, 
-                'token_type' => 'Bearer'
             ], 200);
         } catch (\Exception $e) {
             throw new HttpException(500, $e->getMessage());
