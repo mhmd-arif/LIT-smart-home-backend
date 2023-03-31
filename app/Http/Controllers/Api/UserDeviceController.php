@@ -19,17 +19,16 @@ class UserDeviceController extends Controller
     {
         try {
             $currentUser = Auth::user();
-
-            $validator = Validator::make($request->all(),[
+            $validator = Validator::make($request->all(), [
                 'device_name' => 'required|string|max:100',
                 'device_id' => 'required|exists:devices,id',
             ]);
 
-            if($validator->fails()){
+            if ($validator->fails()) {
                 return response()->json([
                     "success" => false,
                     "message" => $validator->errors(),
-                ], 400);       
+                ], 400);
             }
 
             DB::table('user_devices')->insert([
@@ -42,8 +41,9 @@ class UserDeviceController extends Controller
                 ]
             ]);
 
-            $device = DB::table('user_devices')->get()->last();
-            
+            $device = DB::table('user_devices')->join('devices', 'devices.id', '=', 'user_devices.device_id')
+            ->select('user_devices.*', 'devices.icon_url', 'devices.category', 'devices.volt', 'devices.ampere', 'devices.watt')->get()->last();
+
             return response()->json([
                 'success' => true,
                 'message' => 'UserDevice is created successfully',
@@ -53,16 +53,18 @@ class UserDeviceController extends Controller
             throw new HttpException(500, $e->getMessage());
         }
     }
-    
+
     public function getUserDevices()
     {
         try {
             $currentUser = Auth::user();
 
             $devices = UserDevice::where('user_id', $currentUser->id)
-            ->orderBy('is_favorite', 'desc')
-            ->get();
-            
+                ->join('devices', 'devices.id', '=', 'user_devices.device_id')
+                ->select('user_devices.*', 'devices.icon_url', 'devices.category', 'devices.volt', 'devices.ampere', 'devices.watt')
+                ->orderBy('is_favorite', 'desc')
+                ->get();
+
             return response()->json([
                 'success' => true,
                 'message' => 'Devices is fetched successfully',
@@ -77,10 +79,11 @@ class UserDeviceController extends Controller
     {
         try {
             $currentUser = Auth::user();
-            $device = UserDevice::find($id);
+            $device = UserDevice::join('devices', 'devices.id', '=', 'user_devices.device_id')
+            ->select('user_devices.*', 'devices.icon_url', 'devices.category', 'devices.volt', 'devices.ampere', 'devices.watt')->find($id);
             $checkedDevice = $device !== null ? $device->user_id : false;
 
-            if ($checkedDevice != $currentUser->id){
+            if ($checkedDevice != $currentUser->id) {
                 return response()->json([
                     'success' => false,
                     'message' => 'Unauthorized - cant access this device',
@@ -101,25 +104,26 @@ class UserDeviceController extends Controller
     {
         try {
             $currentUser = Auth::user();
-            $device = UserDevice::find($id);
+            $device = UserDevice::join('devices', 'devices.id', '=', 'user_devices.device_id')
+            ->select('user_devices.*', 'devices.icon_url', 'devices.category', 'devices.volt', 'devices.ampere', 'devices.watt')->find($id);
             $checkedDevice = $device !== null ? $device->user_id : false;
 
-            if ($checkedDevice != $currentUser->id){
+            if ($checkedDevice != $currentUser->id) {
                 return response()->json([
                     'success' => false,
                     'message' => 'Unauthorized - cant access this device',
                 ], 401);
             }
 
-            $validator = Validator::make($request->all(),[
+            $validator = Validator::make($request->all(), [
                 'device_name' => 'required|string|max:100',
             ]);
 
-            if($validator->fails()){
+            if ($validator->fails()) {
                 return response()->json([
                     "success" => false,
                     "message" => $validator->errors(),
-                ], 400);       
+                ], 400);
             }
 
             $device->device_name = $request->device_name;
@@ -130,7 +134,6 @@ class UserDeviceController extends Controller
                 'message' => 'Your device (' . $device->device_name . ') is updated succesfully',
                 'data' => $device
             ], 200);
-
         } catch (\Exception $e) {
             throw new HttpException(500, $e->getMessage());
         }
@@ -140,27 +143,28 @@ class UserDeviceController extends Controller
     {
         try {
             $currentUser = Auth::user();
-            $device = UserDevice::find($id);
+            $device = UserDevice::join('devices', 'devices.id', '=', 'user_devices.device_id')
+            ->select('user_devices.*', 'devices.icon_url', 'devices.category', 'devices.volt', 'devices.ampere', 'devices.watt')->find($id);
             $checkedDevice = $device !== null ? $device->user_id : false;
 
-            if ($checkedDevice != $currentUser->id){
+            if ($checkedDevice != $currentUser->id) {
                 return response()->json([
                     'success' => false,
                     'message' => 'Unauthorized - cant access this device',
                 ], 401);
             }
 
-            $validator = Validator::make($request->all(),[
+            $validator = Validator::make($request->all(), [
                 'state' => 'required|boolean',
             ]);
 
-            if($validator->fails()){
+            if ($validator->fails()) {
                 return response()->json([
                     "success" => false,
                     "message" => $validator->errors(),
-                ], 400);       
+                ], 400);
             }
-    
+
             if ($device->state == 1) {
                 $time_last_change = (new Carbon($device->updated_at))->toImmutable()->setTimezone('Asia/Jakarta');
                 $get_diff_hour = ($time_last_change->diffInSeconds(now())) / 3600;
@@ -168,16 +172,16 @@ class UserDeviceController extends Controller
             } else if ($device->state == 0) {
                 $last_kwh = $device->last_kwh;
             }
-    
+
             $device = UserDevice::where("id", $id)->update([
                 "state" => $request->state,
                 "last_kwh" => $last_kwh,
             ]);
-    
-            $device = UserDevice::find($id);
-    
-            return response()->json($device);
 
+            $device = UserDevice::join('devices', 'devices.id', '=', 'user_devices.device_id')
+            ->select('user_devices.*', 'devices.icon_url', 'devices.category', 'devices.volt', 'devices.ampere', 'devices.watt')->find($id);
+
+            return response()->json($device);
         } catch (\Exception $e) {
             throw new HttpException(500, $e->getMessage());
         }
@@ -187,54 +191,56 @@ class UserDeviceController extends Controller
     {
         try {
             $currentUser = Auth::user();
-            $device = UserDevice::find($id);
+            $device = UserDevice::join('devices', 'devices.id', '=', 'user_devices.device_id')
+            ->select('user_devices.*', 'devices.icon_url', 'devices.category', 'devices.volt', 'devices.ampere', 'devices.watt')->find($id);
             $checkedDevice = $device !== null ? $device->user_id : false;
 
-            if ($checkedDevice != $currentUser->id){
+            if ($checkedDevice != $currentUser->id) {
                 return response()->json([
                     'success' => false,
                     'message' => 'Unauthorized - cant access this device',
                 ], 401);
             }
 
-            $validator = Validator::make($request->all(),[
+            $validator = Validator::make($request->all(), [
                 'is_favorite' => 'required|boolean',
             ]);
 
-            if($validator->fails()){
+            if ($validator->fails()) {
                 return response()->json([
                     "success" => false,
                     "message" => $validator->errors(),
-                ], 400);       
+                ], 400);
             }
-    
+
             $device = UserDevice::where("id", $id)->update([
                 "is_favorite" => $request->is_favorite,
             ]);
-    
-            $device = UserDevice::find($id);
-    
+
+            $device = UserDevice::join('devices', 'devices.id', '=', 'user_devices.device_id')
+            ->select('user_devices.*', 'devices.icon_url', 'devices.category', 'devices.volt', 'devices.ampere', 'devices.watt')->find($id);
+
             return response()->json($device);
         } catch (\Exception $e) {
             throw new HttpException(500, $e->getMessage());
         }
-        
     }
 
     public function deleteUserDevices($id)
     {
         try {
             $currentUser = Auth::user();
-            $device = UserDevice::find($id);
+            $device = UserDevice::join('devices', 'devices.id', '=', 'user_devices.device_id')
+            ->select('user_devices.*', 'devices.icon_url', 'devices.category', 'devices.volt', 'devices.ampere', 'devices.watt')->find($id);
             $checkedDevice = $device !== null ? $device->user_id : false;
 
-            if ($checkedDevice != $currentUser->id){
+            if ($checkedDevice != $currentUser->id) {
                 return response()->json([
                     'success' => false,
                     'message' => 'Unauthorized - cant access this device',
                 ], 401);
             }
-            
+
             $device->delete();
             return response()->json([
                 'success' => true,
