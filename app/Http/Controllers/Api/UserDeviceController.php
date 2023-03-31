@@ -4,6 +4,12 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use App\Models\UserDevice;
+use App\Events\UserDeviceCreated;
+use App\Events\UserDeviceUpdated;
+use App\Events\UserDeviceFavoriteUpdated;
+use App\Events\UserDeviceStateUpdated;
+use App\Events\UserDeviceDeleted;
+
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
@@ -12,6 +18,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
 use Symfony\Component\HttpKernel\Exception\HttpException;
 use Carbon\Carbon;
+
 
 class UserDeviceController extends Controller
 {
@@ -44,9 +51,11 @@ class UserDeviceController extends Controller
             $device = DB::table('user_devices')->join('devices', 'devices.id', '=', 'user_devices.device_id')
             ->select('user_devices.*', 'devices.icon_url', 'devices.category', 'devices.volt', 'devices.ampere', 'devices.watt')->get()->last();
 
+            UserDeviceCreated::dispatch($device);
+
             return response()->json([
                 'success' => true,
-                'message' => 'UserDevice is created successfully',
+                'message' => 'UserDevice ( ' . $device->device_name . ' ) is created successfully',
                 'data' => $device
             ], 200);
         } catch (\Exception $e) {
@@ -129,6 +138,8 @@ class UserDeviceController extends Controller
             $device->device_name = $request->device_name;
             $device->save();
 
+            UserDeviceUpdated::dispatch($device);
+
             return response()->json([
                 'success' => true,
                 'message' => 'Your device (' . $device->device_name . ') is updated succesfully',
@@ -181,7 +192,13 @@ class UserDeviceController extends Controller
             $device = UserDevice::join('devices', 'devices.id', '=', 'user_devices.device_id')
             ->select('user_devices.*', 'devices.icon_url', 'devices.category', 'devices.volt', 'devices.ampere', 'devices.watt')->find($id);
 
-            return response()->json($device);
+            UserDeviceStateUpdated::dispatch($device);
+
+            return response()->json([
+                'success' => true,
+                'message' => 'Your device (' . $device->device_name . ') state is updated succesfully',
+                'data' => $device
+            ], 200);
         } catch (\Exception $e) {
             throw new HttpException(500, $e->getMessage());
         }
@@ -220,7 +237,13 @@ class UserDeviceController extends Controller
             $device = UserDevice::join('devices', 'devices.id', '=', 'user_devices.device_id')
             ->select('user_devices.*', 'devices.icon_url', 'devices.category', 'devices.volt', 'devices.ampere', 'devices.watt')->find($id);
 
-            return response()->json($device);
+            UserDeviceFavoriteUpdated::dispatch($device);
+
+            return response()->json([
+                'success' => true,
+                'message' => 'Your device (' . $device->device_name . ') favorite is updated succesfully',
+                'data' => $device
+            ], 200);
         } catch (\Exception $e) {
             throw new HttpException(500, $e->getMessage());
         }
@@ -242,6 +265,9 @@ class UserDeviceController extends Controller
             }
 
             $device->delete();
+
+            UserDeviceDeleted::dispatch($device);
+
             return response()->json([
                 'success' => true,
                 'message' => 'Your device (' . $device->device_name . ') is deleted successfully',
