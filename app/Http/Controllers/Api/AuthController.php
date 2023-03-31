@@ -2,6 +2,8 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
+use App\Events\UserUpdated;
+
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Auth;
@@ -121,6 +123,8 @@ class AuthController extends Controller
             $user->name = $request->name;
             $user->email = $request->email;
             $user->save();
+
+            UserUpdated::dispatch($user);
     
             return response()->json([
                 'success' => true,

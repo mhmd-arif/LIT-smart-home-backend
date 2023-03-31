@@ -3,13 +3,15 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Auth;
 use App\Models\Device;
 use App\Models\User;
 use App\Models\UserDevice;
 use App\Models\DeviceUsage;
+use App\Events\UsageCreated;
+
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Auth;
 use Symfony\Component\HttpKernel\Exception\HttpException;
 use Carbon\Carbon;
 
@@ -88,6 +90,8 @@ class DeviceUsageController extends Controller
                     ]
                 ]);
             }
+
+            // UsageCreated::dispatch($notyet);
 
             return response()->json([
                 'success' => true,
