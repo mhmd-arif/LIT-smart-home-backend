@@ -17,9 +17,8 @@ class DeviceController extends Controller
     public function createDevice(Request $request)
     {
         try {
-
             $validator = Validator::make($request->all(),[
-                'category' => 'required|string|max:50',
+                'category' => 'required|string|max:50|unique:devices',
                 'volt' => 'required|numeric',
                 'ampere' => 'required|numeric',
                 'watt' => 'required|numeric',
@@ -105,7 +104,7 @@ class DeviceController extends Controller
             }
 
             $validator = Validator::make($request->all(),[
-                'category' => 'required|string|max:50',
+                'category' => 'required|string|max:50|unique:devices',
                 'volt' => 'required|numeric',
                 'ampere' => 'required|numeric',
                 'watt' => 'required|numeric',

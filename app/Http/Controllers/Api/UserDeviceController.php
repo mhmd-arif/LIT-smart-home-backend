@@ -116,7 +116,7 @@ class UserDeviceController extends Controller
             }
 
             $validator = Validator::make($request->all(), [
-                'device_name' => 'required|string|max:100',
+                'device_name' => 'required|string|max:100|unique:user_devices',
             ]);
 
             if ($validator->fails()) {
