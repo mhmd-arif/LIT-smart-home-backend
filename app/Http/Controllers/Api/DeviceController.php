@@ -5,6 +5,10 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use App\Models\Device;
 use App\Models\DeviceUsage;
+use App\Events\DeviceCreated;
+use App\Events\DeviceUpdated;
+use App\Events\DeviceDeleted;
+
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
@@ -44,6 +48,8 @@ class DeviceController extends Controller
             ]);
 
             $device = DB::table('devices')->get()->last();
+            
+            DeviceCreated::dispatch($device);
             
             return response()->json([
                 'success' => true,
@@ -125,6 +131,8 @@ class DeviceController extends Controller
             $device->icon_url = $request->icon_url;
             $device->save();
 
+            DeviceUpdated::dispatch($device);
+
             return response()->json([
                 'success' => true,
                 'message' => 'Device ( ' . $device->category . ' ) is updated succesfully',
@@ -149,6 +157,9 @@ class DeviceController extends Controller
             }
             
             $device->delete();
+
+            DeviceDeleted::dispatch($device);
+
             return response()->json([
                 'success' => true,
                 'message' => 'Device ( ' . $device->category . ' ) is deleted successfully',
