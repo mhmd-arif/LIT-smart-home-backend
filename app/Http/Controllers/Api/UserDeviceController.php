@@ -41,7 +41,8 @@ class UserDeviceController extends Controller
                 ]
             ]);
 
-            $device = DB::table('user_devices')->join('devices', 'devices.id', '=', 'user_devices.device_id')->get()->last();
+            $device = DB::table('user_devices')->join('devices', 'devices.id', '=', 'user_devices.device_id')
+            ->select('user_devices.*', 'devices.icon_url', 'devices.category', 'devices.volt', 'devices.ampere', 'devices.watt')->get()->last();
 
             return response()->json([
                 'success' => true,
@@ -60,6 +61,7 @@ class UserDeviceController extends Controller
 
             $devices = UserDevice::where('user_id', $currentUser->id)
                 ->join('devices', 'devices.id', '=', 'user_devices.device_id')
+                ->select('user_devices.*', 'devices.icon_url', 'devices.category', 'devices.volt', 'devices.ampere', 'devices.watt')
                 ->orderBy('is_favorite', 'desc')
                 ->get();
 
@@ -77,7 +79,8 @@ class UserDeviceController extends Controller
     {
         try {
             $currentUser = Auth::user();
-            $device = UserDevice::join('devices', 'devices.id', '=', 'user_devices.device_id')->find($id);
+            $device = UserDevice::join('devices', 'devices.id', '=', 'user_devices.device_id')
+            ->select('user_devices.*', 'devices.icon_url', 'devices.category', 'devices.volt', 'devices.ampere', 'devices.watt')->find($id);
             $checkedDevice = $device !== null ? $device->user_id : false;
 
             if ($checkedDevice != $currentUser->id) {
@@ -101,7 +104,8 @@ class UserDeviceController extends Controller
     {
         try {
             $currentUser = Auth::user();
-            $device = UserDevice::join('devices', 'devices.id', '=', 'user_devices.device_id')->find($id);
+            $device = UserDevice::join('devices', 'devices.id', '=', 'user_devices.device_id')
+            ->select('user_devices.*', 'devices.icon_url', 'devices.category', 'devices.volt', 'devices.ampere', 'devices.watt')->find($id);
             $checkedDevice = $device !== null ? $device->user_id : false;
 
             if ($checkedDevice != $currentUser->id) {
@@ -139,7 +143,8 @@ class UserDeviceController extends Controller
     {
         try {
             $currentUser = Auth::user();
-            $device = UserDevice::join('devices', 'devices.id', '=', 'user_devices.device_id')->find($id);
+            $device = UserDevice::join('devices', 'devices.id', '=', 'user_devices.device_id')
+            ->select('user_devices.*', 'devices.icon_url', 'devices.category', 'devices.volt', 'devices.ampere', 'devices.watt')->find($id);
             $checkedDevice = $device !== null ? $device->user_id : false;
 
             if ($checkedDevice != $currentUser->id) {
@@ -173,7 +178,8 @@ class UserDeviceController extends Controller
                 "last_kwh" => $last_kwh,
             ]);
 
-            $device = UserDevice::find($id);
+            $device = UserDevice::join('devices', 'devices.id', '=', 'user_devices.device_id')
+            ->select('user_devices.*', 'devices.icon_url', 'devices.category', 'devices.volt', 'devices.ampere', 'devices.watt')->find($id);
 
             return response()->json($device);
         } catch (\Exception $e) {
@@ -185,7 +191,8 @@ class UserDeviceController extends Controller
     {
         try {
             $currentUser = Auth::user();
-            $device = UserDevice::join('devices', 'devices.id', '=', 'user_devices.device_id')->find($id);
+            $device = UserDevice::join('devices', 'devices.id', '=', 'user_devices.device_id')
+            ->select('user_devices.*', 'devices.icon_url', 'devices.category', 'devices.volt', 'devices.ampere', 'devices.watt')->find($id);
             $checkedDevice = $device !== null ? $device->user_id : false;
 
             if ($checkedDevice != $currentUser->id) {
@@ -210,7 +217,8 @@ class UserDeviceController extends Controller
                 "is_favorite" => $request->is_favorite,
             ]);
 
-            $device = UserDevice::join('devices', 'devices.id', '=', 'user_devices.device_id')->find($id);
+            $device = UserDevice::join('devices', 'devices.id', '=', 'user_devices.device_id')
+            ->select('user_devices.*', 'devices.icon_url', 'devices.category', 'devices.volt', 'devices.ampere', 'devices.watt')->find($id);
 
             return response()->json($device);
         } catch (\Exception $e) {
@@ -222,7 +230,8 @@ class UserDeviceController extends Controller
     {
         try {
             $currentUser = Auth::user();
-            $device = UserDevice::join('devices', 'devices.id', '=', 'user_devices.device_id')->find($id);
+            $device = UserDevice::join('devices', 'devices.id', '=', 'user_devices.device_id')
+            ->select('user_devices.*', 'devices.icon_url', 'devices.category', 'devices.volt', 'devices.ampere', 'devices.watt')->find($id);
             $checkedDevice = $device !== null ? $device->user_id : false;
 
             if ($checkedDevice != $currentUser->id) {
