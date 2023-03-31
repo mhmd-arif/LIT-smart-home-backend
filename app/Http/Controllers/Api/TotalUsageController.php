@@ -25,9 +25,9 @@ class TotalUsageController extends Controller
             $today = date('Y-m-d H:i:s');
             $yesterday = date('Y-m-d', strtotime('-1 day'));
             $total_usages = DB::table('total_usages')
-            ->where('user_id', $currentUser->id)
-            ->whereBetween('created_at', [$yesterday, $today])
-            ->get();
+                ->where('user_id', $currentUser->id)
+                ->whereBetween('created_at', [$yesterday, $today])
+                ->get();
 
             return response()->json([
                 'success' => true,
@@ -63,6 +63,7 @@ class TotalUsageController extends Controller
                 ->get();
 
             $devices = DB::table('device_usages')
+                ->where('user_id', $currentUser->id)
                 ->whereBetween('created_at', [$yesterday, $today])
                 ->select(
                     'user_device_id',
@@ -114,6 +115,7 @@ class TotalUsageController extends Controller
                 ->get();
 
             $devices = DB::table('device_usages')
+                ->where('user_id', $currentUser->id)
                 ->whereBetween('created_at', [$yesterday, $today])
                 ->select(
                     'user_device_id',
@@ -163,6 +165,7 @@ class TotalUsageController extends Controller
                 ->get();
 
             $devices = DB::table('device_usages')
+                ->where('user_id', $currentUser->id)
                 ->whereBetween('created_at', [$yesterday, $today])
                 ->select(
                     'user_device_id',
@@ -210,6 +213,7 @@ class TotalUsageController extends Controller
                 ->get();
 
             $devices = DB::table('device_usages')
+                ->where('user_id', $currentUser->id)
                 ->whereBetween('created_at', [$yesterday, $today])
                 ->select(
                     'user_device_id',
