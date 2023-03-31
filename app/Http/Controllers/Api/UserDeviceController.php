@@ -18,6 +18,8 @@ class UserDeviceController extends Controller
     public function createUserDevice(Request $request)
     {
         try {
+            $currentUser = Auth::user();
+
             $validator = Validator::make($request->all(),[
                 'device_name' => 'required|string|max:100',
                 'device_id' => 'required|exists:devices,id',
@@ -29,7 +31,7 @@ class UserDeviceController extends Controller
                     "message" => $validator->errors(),
                 ], 400);       
             }
-            
+
             DB::table('user_devices')->insert([
                 [
                     'device_name' => $request->device_name,
