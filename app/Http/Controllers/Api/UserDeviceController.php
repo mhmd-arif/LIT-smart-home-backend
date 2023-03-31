@@ -20,7 +20,7 @@ class UserDeviceController extends Controller
         try {
             $currentUser = Auth::user();
             $validator = Validator::make($request->all(), [
-                'device_name' => 'required|string|max:100|unique:user_devices',
+                'device_name' => 'required|string|max:100',
                 'device_id' => 'required|exists:devices,id',
             ]);
 
@@ -116,7 +116,7 @@ class UserDeviceController extends Controller
             }
 
             $validator = Validator::make($request->all(), [
-                'device_name' => 'required|string|max:100|unique:user_devices',
+                'device_name' => 'required|string|max:100',
             ]);
 
             if ($validator->fails()) {
