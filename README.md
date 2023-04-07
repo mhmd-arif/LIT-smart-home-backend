@@ -7,7 +7,7 @@ Smart Home - LIT adalah project untuk menampilkan dashboard dan device managemen
 
 ## 💾 Documentation
 - [UI Wireframe](https://www.figma.com/file/vnzBpOdVkW5COuhIMBC7Kq/UI-Wireframe?node-id=2%3A3&t=rW2Nv1HVIVTVwMqn-0)
-- Postman API Documentation
+- [Frontend Repo](https://github.com/saddansyah/LIT-smart-home-frontend)
 
 <hr/>
 
