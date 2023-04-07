@@ -7,39 +7,44 @@ use App\Models\Device;
 use App\Models\DeviceUsage;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Validator;
 use Symfony\Component\HttpKernel\Exception\HttpException;
 use Carbon\Carbon;
 
 class DeviceController extends Controller
 {
-    public function index()
+    public function createDevice(Request $request)
     {
         try {
-            $devices = Device::orderBy('is_favorite', 'desc')->get();
-            return response()->json([
-                'success' => true,
-                'message' => 'Devices is fetched successfully',
-                'data' => $devices
-            ], 200);
-        } catch (\Exception $e) {
-            throw new HttpException(500, $e->getMessage());
-        }
-    }
-
-    public function store(Request $request)
-    {
-        try {
-            $request->validate([
-                'user_id' => 'required|exists:users,id',
-                'device_name' => 'required',
-                'category' => 'required',
-                'volt' => 'required',
-                'ampere' => 'required',
-                'watt' => 'required',
-                'icon_url' => 'required'
+            $validator = Validator::make($request->all(),[
+                'category' => 'required|string|max:50|unique:devices',
+                'volt' => 'required|numeric',
+                'ampere' => 'required|numeric',
+                'watt' => 'required|numeric',
+                'icon_url' => 'required|string'
             ]);
 
-            $device = Device::create($request->all());
+            if($validator->fails()){
+                return response()->json([
+                    "success" => false,
+                    "message" => $validator->errors(),
+                ], 400);       
+            }
+            
+            DB::table('devices')->insert([
+                [
+                    'category' => $request->category,
+                    'volt' => $request->volt,
+                    'ampere' => $request->ampere,
+                    'watt' => $request->watt,
+                    'icon_url' => $request->icon_url,
+                    "created_at" => now(),
+                ]
+            ]);
+
+            $device = DB::table('devices')->get()->last();
+            
             return response()->json([
                 'success' => true,
                 'message' => 'Device is created successfully',
@@ -50,34 +55,69 @@ class DeviceController extends Controller
         }
     }
 
-    public function show(Device $device)
+    public function getDevices()
     {
         try {
+            $devices = Device::get();
             return response()->json([
                 'success' => true,
-                'message' => 'Your device (' . $device->device_name . ') is found',
-                'data' => $device
-            ], 200);;
+                'message' => 'Devices is fetched successfully',
+                'data' => $devices
+            ], 200);
         } catch (\Exception $e) {
             throw new HttpException(500, $e->getMessage());
         }
     }
 
-    public function update(Device $device, Request $request)
+    public function findDevice($id)
     {
         try {
+            $device = Device::find($id);
 
-            $request->validate([
-                'user_id' => 'required|exists:users,id',
-                'device_name' => 'required',
-                'category' => 'required',
+            if($device === null){
+                return response()->json([
+                    "success" => false,
+                    'message' => 'Bad request - device not found',
+                ], 400);
+            }
+
+            return response()->json([
+                'success' => true,
+                'message' => 'Device ( ' . $device->category . ' ) is found',
+                'data' => $device
+            ], 200);
+        } catch (\Exception $e) {
+            throw new HttpException(500, $e->getMessage());
+        }
+    }
+
+    public function updateDevice($id, Request $request)
+    {
+        try {
+            $device = Device::find($id);
+
+            if($device === null){
+                return response()->json([
+                    "success" => false,
+                    'message' => 'Bad request - device not found',
+                ], 400);
+            }
+
+            $validator = Validator::make($request->all(),[
+                'category' => 'required|string|max:50|unique:devices',
                 'volt' => 'required|numeric',
                 'ampere' => 'required|numeric',
                 'watt' => 'required|numeric',
-                'icon_url' => 'required'
+                'icon_url' => 'required|string'
             ]);
 
-            $device->device_name = $request->device_name;
+            if($validator->fails()){
+                return response()->json([
+                    "success" => false,
+                    "message" => $validator->errors(),
+                ], 400);       
+            }
+
             $device->category = $request->category;
             $device->volt = $request->volt;
             $device->ampere = $request->ampere;
@@ -87,7 +127,7 @@ class DeviceController extends Controller
 
             return response()->json([
                 'success' => true,
-                'message' => 'Your device (' . $device->device_name . ') is updated succesfully',
+                'message' => 'Device ( ' . $device->category . ' ) is updated succesfully',
                 'data' => $device
             ], 200);
 
@@ -96,65 +136,22 @@ class DeviceController extends Controller
         }
     }
 
-    public function updateState(Request $request, $id)
+    public function deleteDevices($id)
     {
         try {
-
-            $request->validate([
-                'state' => 'required',
-            ]);
-    
             $device = Device::find($id);
-    
-            if ($device->state == 1) {
-                $time_last_change = (new Carbon($device->updated_at))->toImmutable()->setTimezone('Asia/Jakarta');
-                $get_diff_hour = ($time_last_change->diffInSeconds(now())) / 3600;
-                $last_kwh = round(($get_diff_hour * $device->watt) / 1000, 5) + ($device->last_kwh);
-            } else if ($device->state == 0) {
-                $last_kwh = $device->last_kwh;
+
+            if($device === null){
+                return response()->json([
+                    "success" => false,
+                    'message' => 'Bad request - device not found',
+                ], 400);
             }
-    
-            $device = Device::where("id", $id)->update([
-                "state" => $request->state,
-                "last_kwh" => $last_kwh,
-            ]);
-    
-            $device = Device::find($id);
-    
-            return response()->json($device);
-
-        } catch (\Exception $e) {
-            throw new HttpException(500, $e->getMessage());
-        }
-    }
-
-    public function updateFavorite(Request $request, $id)
-    {
-        try {
-            $request->validate([
-                'is_favorite' => 'required',
-            ]);
-    
-            $device = Device::where("id", $id)->update([
-                "is_favorite" => $request->is_favorite,
-            ]);
-    
-            $device = Device::find($id);
-    
-            return response()->json($device);
-        } catch (\Exception $e) {
-            throw new HttpException(500, $e->getMessage());
-        }
-        
-    }
-
-    public function destroy(Device $device)
-    {
-        try {
+            
             $device->delete();
             return response()->json([
                 'success' => true,
-                'message' => 'Your device (' . $device->device_name . ') is deleted successfully',
+                'message' => 'Device ( ' . $device->category . ' ) is deleted successfully',
                 'data' => $device
             ], 200);
         } catch (\Exception $e) {

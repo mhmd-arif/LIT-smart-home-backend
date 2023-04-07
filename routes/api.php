@@ -3,10 +3,10 @@
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Api\DeviceController;
-use App\Http\Controllers\Api\UserController;
 use App\Http\Controllers\Api\DeviceUsageController;
 use App\Http\Controllers\Api\TotalUsageController;
 use App\Http\Controllers\Api\AuthController;
+use App\Http\Controllers\Api\UserDeviceController;
 
 /*
 |--------------------------------------------------------------------------
@@ -23,27 +23,49 @@ use App\Http\Controllers\Api\AuthController;
 //     return $request->user();
 // });
 
+// auth
+Route::post('auth/register', [AuthController::class, 'register']);
+Route::post('auth/login', [AuthController::class, 'login']);
+
+// device usage automation
+Route::post('device_usages', [DeviceUsageController::class, 'createUsage']);
 
 // device
-Route::apiResource('devices', DeviceController::class);
-Route::patch('devices/update_state/{id}', [DeviceController::class, 'updateState']);
-Route::patch('devices/update_favorite/{id}', [DeviceController::class, 'updateFavorite']);
+Route::post('devices', [DeviceController::class, 'createDevice']);
+Route::get('devices', [DeviceController::class, 'getDevices']);
+Route::get('devices/{id}', [DeviceController::class, 'findDevice']);
+Route::put('devices/{id}', [DeviceController::class, 'updateDevice']);
+Route::delete('devices/{id}', [DeviceController::class, 'deleteDevices']);
 
-// device usage per device
-Route::apiResource('device_usages', DeviceUsageController::class);
-Route::post('device_usages/create', [DeviceUsageController::class, 'createUsage']);
-Route::get('device_usages/get_usage/{id}', [DeviceUsageController::class, 'getUsage']);
+//Protecting Routes
+Route::group(['middleware' => ['auth:sanctum']], function () {
 
-// usages total all device
-Route::get('total_usages', [TotalUsageController::class, 'getTotalUsage']);
-Route::get('total_usages/hourly/', [TotalUsageController::class, 'getTotalUsageHourly']);
-Route::get('total_usages/daily', [TotalUsageController::class, 'getTotalUsageDaily']);
-Route::get('total_usages/weekly', [TotalUsageController::class, 'getTotalUsageWeekly']);
-Route::get('total_usages/monthly', [TotalUsageController::class, 'getTotalUsageMonthly']);
+    // User device
+    Route::post('user_devices', [UserDeviceController::class, 'createUserDevice']);
+    Route::get('user_devices', [UserDeviceController::class, 'getUserDevices']);
+    Route::get('user_devices/{id}', [UserDeviceController::class, 'findUserDevice']);
+    Route::put('user_devices/{id}', [UserDeviceController::class, 'updateUserDevice']);
+    Route::patch('user_devices/update_state/{id}', [UserDeviceController::class, 'updateState']);
+    Route::patch('user_devices/update_favorite/{id}', [UserDeviceController::class, 'updateFavorite']);
+    Route::delete('user_devices/{id}', [UserDeviceController::class, 'deleteUserDevices']);
 
-// user
-Route::apiResource('users', UserController::class);
+    // device usage per device
+    Route::get('device_usages', [DeviceUsageController::class, 'getUsages']);
+    Route::get('device_usages/{id}', [DeviceUsageController::class, 'findUsage']);
 
-// auth
-Route::post('auth/login', [AuthController::class, 'login']);
-Route::post('auth/register', [AuthController::class, 'register']);
+    // usages total all device
+    Route::get('total_usages', [TotalUsageController::class, 'getTotalUsage']);
+    Route::get('total_usages/hourly', [TotalUsageController::class, 'getTotalUsageHourly']);
+    Route::get('total_usages/daily', [TotalUsageController::class, 'getTotalUsageDaily']);
+    Route::get('total_usages/weekly', [TotalUsageController::class, 'getTotalUsageWeekly']);
+    Route::get('total_usages/monthly', [TotalUsageController::class, 'getTotalUsageMonthly']);
+
+    // crud user
+    Route::get('auth/current_user', [AuthController::class, 'getCurrentUser']);
+    Route::put('auth/update_user', [AuthController::class, 'updateUser']);
+
+    // logout
+    Route::post('auth/logout', [AuthController::class, 'logout']);
+
+    
+});

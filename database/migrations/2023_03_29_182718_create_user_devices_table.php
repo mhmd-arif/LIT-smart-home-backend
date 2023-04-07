@@ -11,11 +11,14 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('total_usages', function (Blueprint $table) {
+        Schema::create('user_devices', function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger('user_id');
-            $table->float('watt')->nullable()->default(0);            
-            $table->decimal('kwh', 9, 5)->nullable()->default(0.0000);
+            $table->unsignedBigInteger('device_id');
+            $table->string('device_name', 100)->default('device_name');
+            $table->boolean('is_favorite')->nullable()->default(false);
+            $table->boolean('state')->nullable()->default(false);
+            $table->decimal('last_kwh', 9, 5)->nullable()->default(0.0000);
             $table->timestamps();
         });
     }
@@ -25,6 +28,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('total_usages');
+        Schema::dropIfExists('user_devices');
     }
 };
