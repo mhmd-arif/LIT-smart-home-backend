@@ -12,6 +12,7 @@ use App\Models\UserDevice;
 use App\Models\DeviceUsage;
 use Symfony\Component\HttpKernel\Exception\HttpException;
 use Carbon\Carbon;
+use App\Events\NewUsageData;
 
 class DeviceUsageController extends Controller
 {
@@ -88,6 +89,8 @@ class DeviceUsageController extends Controller
                     ]
                 ]);
             }
+
+            event(new NewUsageData());
 
             return response()->json([
                 'success' => true,
