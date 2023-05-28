@@ -14,14 +14,14 @@ class NewUsageData implements ShouldBroadcast
 {
     use Dispatchable, InteractsWithSockets, SerializesModels;
 
-    public $newData;
+    public $message;
 
     /**
      * Create a new event instance.
      */
     public function __construct()
     {
-        $this->newData = "there is an update in the database, please refetch the data.";
+        $this->message = "update on device usages";
     }
 
     /**

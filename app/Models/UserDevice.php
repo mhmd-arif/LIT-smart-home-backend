@@ -9,7 +9,6 @@ use App\Models\DeviceUsage;
 use App\Models\Device;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\belongsTo;
-use Illuminate\Database\Eloquent\Relations\belongsToMany;
 
 class UserDevice extends Model
 {

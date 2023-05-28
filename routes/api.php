@@ -51,6 +51,7 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
 
     // device usage per device
     Route::get('device_usages', [DeviceUsageController::class, 'getUsages']);
+    Route::get('device_usages/pdf', [DeviceUsageController::class, 'createPDF']);
     Route::get('device_usages/{id}', [DeviceUsageController::class, 'findUsage']);
 
     // usages total all device
