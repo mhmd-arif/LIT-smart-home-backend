@@ -41,6 +41,9 @@ php artisan migrate | php artisan migrate:fresh --seed
 php artisan serve
 ``````````
 
+### Note
+If you encounter PHP GD extension error, try to remove ```;``` in ```;extension=gd``` in php.ini
+
 ## 👨‍💻 Contributor
 - [Saddan Syah Akbar](https://github.com/saddansyah)
 - [Muhammad Arif Hidayat](https://github.com/mhmd-arif)

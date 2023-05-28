@@ -12,6 +12,8 @@ use App\Models\UserDevice;
 use App\Models\DeviceUsage;
 use Symfony\Component\HttpKernel\Exception\HttpException;
 use Carbon\Carbon;
+use App\Events\NewUsageData;
+use Barryvdh\DomPDF\Facade\Pdf as PDF;
 
 class DeviceUsageController extends Controller
 {
@@ -19,8 +21,16 @@ class DeviceUsageController extends Controller
     {
         try {
             $currentUser = Auth::user();
-            $device_usages = DB::table('device_usages')->where('user_id', $currentUser->id)->get();
-            
+            // $device_usages = DB::table('device_usages')->where('user_id', $currentUser->id)->get()->all();
+            $device_usages = DeviceUsage::where('user_id', $currentUser->id)
+                // ->join('user_devices', 'user_devices.id', '=', 'device_usages.user_device_id')
+                // ->join('user_devices', 'user_devices.id' ,'=', 'device_usages.user_device_id')
+                // ->join('users', 'users.id' ,'=', 'device_usages.user_id')
+                // ->select('device_usages.*', 'user_devices.device_name')
+                // ->select('*')
+                ->get()
+                ->all();
+
             return response()->json([
                 'success' => true,
                 'message' => 'Device usages is fetched successfully',
@@ -36,7 +46,7 @@ class DeviceUsageController extends Controller
         try {
             $users = DB::table('users')->get();
 
-            foreach ($users as $user){
+            foreach ($users as $user) {
                 $userDevices = DB::table('user_devices')
                     ->where('user_id', $user->id)
                     ->get();
@@ -50,16 +60,16 @@ class DeviceUsageController extends Controller
 
                     if ($uDevice->state == 1) {
                         $time_last_change = (new Carbon($uDevice->updated_at))->toImmutable()->setTimezone('Asia/Jakarta');
-    
+
                         $get_diff_hour = ($time_last_change->diffInSeconds(now())) / 3600;
-    
+
                         $kwh = round(($get_diff_hour * $deviceWatt) / 1000, 5) + ($uDevice->last_kwh);
                         $watt = $deviceWatt;
                     } else {
                         $kwh = round($uDevice->last_kwh, 5);
                         $watt = 0;
                     }
-    
+
                     DB::table('device_usages')->insert([
                         [
                             "user_device_id" => $uDevice->id,
@@ -70,15 +80,15 @@ class DeviceUsageController extends Controller
                             "created_at" => now()
                         ]
                     ]);
-    
+
                     $total_kwh = round($total_kwh + $kwh, 5);
                     $total_watt += $watt;
-    
+
                     UserDevice::where("id", $uDevice->id)->update([
                         "last_kwh" => $kwh,
                     ]);
                 }
-    
+
                 DB::table('total_usages')->insert([
                     [
                         "user_id" => $uDevice->user_id,
@@ -88,6 +98,8 @@ class DeviceUsageController extends Controller
                     ]
                 ]);
             }
+
+            event(new NewUsageData());
 
             return response()->json([
                 'success' => true,
@@ -106,13 +118,13 @@ class DeviceUsageController extends Controller
             $userDevice = UserDevice::find($id);
             $checkedDevice = ($userDevice !== null) ? $userDevice->user_id : false;
 
-            if (($checkedDevice) != ($currentUser->id)){
+            if (($checkedDevice) != ($currentUser->id)) {
                 return response()->json([
                     'success' => false,
                     'message' => 'cant access this device',
                 ], 401);
             }
-            
+
             return response()->json([
                 'success' => true,
                 'message' => 'Device usage by is fetched successfully',
@@ -123,7 +135,27 @@ class DeviceUsageController extends Controller
         }
     }
 
-    // // not used
+    public function createPDF()
+    {
+        $currentUser = Auth::user();
+        $device_usages = DeviceUsage::where('user_id', $currentUser->id)
+            // ->join('user_devices', 'user_devices.id', '=', 'device_usages.user_device_id')
+            // ->join('user_devices', 'user_devices.id' ,'=', 'device_usages.user_device_id')
+            // ->join('users', 'users.id' ,'=', 'device_usages.user_id')
+            // ->select('device_usages.*', 'user_devices.device_name')
+            ->get()
+            ->all();
+
+
+        // view()->share('employee', $device_usages);
+        $pdf = PDF::loadView('index', array('device_usages' => $device_usages));
+
+        // download PDF file with download method
+        return $pdf->download('usage.pdf');
+    }
+
+    // Probably used for optimizing memory
+    // -------------------------------------
     // public function destroy(DeviceUsage $device_usage)
     // {
     //     try {
