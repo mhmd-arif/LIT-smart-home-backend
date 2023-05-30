@@ -44,6 +44,48 @@ php artisan serve
 ### Note
 If you encounter PHP GD extension error, try to remove ```;``` in ```;extension=gd``` in php.ini
 
+## 📁 Folder Structure
+```
+├── app                         
+│   ├── Console
+│   ├── Events
+│   ├── Exceptions              
+│   ├── Http                
+│   │   ├── Controllers                
+│   │   ├── Middleware                 
+│   │   ├── Requests                  
+│   ├── Models                                
+│   ├── Providers
+├── bootstrap                  
+├── config              
+├── database
+│   ├── factories
+│   ├── migrations
+│   ├── seeds
+├── public
+├── resources
+│   ├── lang
+│   ├── views
+├── routes
+│   ├── api.php
+│   ├── channels.php
+│   ├── console.php
+│   ├── web.php
+├── storage
+│   ├── app
+│   ├── framework
+│   │   ├── cache
+│   │   ├── sessions
+│   │   ├── views
+│   ├── logs
+├── tests
+├── vendor
+├── .env
+├── artisan
+├── composer.json
+├── server.php
+```
+
 ## 👨‍💻 Contributor
 - [Saddan Syah Akbar](https://github.com/saddansyah)
 - [Muhammad Arif Hidayat](https://github.com/mhmd-arif)
